@@ -82,11 +82,11 @@ public class RecordVideoThread implements Runnable {
 			Rectangle captureSize = new Rectangle(screenBounds);
 			
 			// let's make a IMediaWriter to write the file.
-			IMediaWriter writer = ToolFactory.makeWriter( outputFile );
+			IMediaWriter writer = ToolFactory.makeWriter( new File( outputFile ).getAbsolutePath() );
 			
 			// We tell it we're going to add one video stream, with id 0,
-			// at position 0, and that it will have a fixed frame rate of FRAME_RATE.
-			writer.addVideoStream(0, 0,ICodec.ID.CODEC_ID_H264, screenBounds.width, screenBounds.height);
+			// at position 0, and that it will have a fixed frame rate of FRAME_RATE. CODEC_ID_H264,CODEC_ID_MPEG4
+			writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_H264, screenBounds.width, screenBounds.height);
 			long startTime = System.nanoTime();
 			while( record ) {
 				capturestared = true;
@@ -96,7 +96,7 @@ public class RecordVideoThread implements Runnable {
 				BufferedImage bgrScreen = convertToType(screen, BufferedImage.TYPE_3BYTE_BGR);
 				// encode the image to stream #0
 				writer.encodeVideo(0, bgrScreen, System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
-				sleepThread( (long)(1000/FRAME_RATE) );
+				sleepThread( (long)(1/FRAME_RATE) ); // millisec 1000 = 1 sec
 			}
 			// tell the writer to close and write the trailer if  needed
 			writer.flush();
@@ -109,12 +109,13 @@ public class RecordVideoThread implements Runnable {
 	}
 	
 	/**
-	 * Causes the currently executing thread to sleep for the specified number of milliseconds.
-	 * @param time	the length of time to sleep in milliseconds
+	 * Causes the currently executing thread to sleep for the specified number of seconds.
+	 * @param time	the length of time to sleep in seconds
 	 */
-	public void sleepThread(long millis) {
+	public void sleepThread(long sec) {
 		try {
-			Thread.sleep( millis );
+			java.util.concurrent.TimeUnit.SECONDS.sleep(5);
+			//Thread.sleep( millis );
 		} catch (InterruptedException e) {
 			System.out.println("Sleep Exception:"+ e.getMessage());
 		}

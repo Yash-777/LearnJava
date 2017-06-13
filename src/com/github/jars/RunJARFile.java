@@ -1,7 +1,9 @@
 package com.github.jars;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,22 +59,57 @@ public class RunJARFile {
 	 */
 	static String newClient = "cmd.exe /c start ";
 	
-	/**
-	 * The ProcessBuilder.start() and Runtime.exec methods create a native process and 
-	 * return an instance of a subclass of Process that can be used to control the process 
-	 * and obtain information about it. 
-	 * 
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		runJarUsingParams();
 		
-		String command = "ping www.github.com";
-		commandsOfOS(newClient, command);
+		/*String command = "ping www.github.com";
+		commandsOfOS(newClient, command);*/
 	}
-	private static void commandsOfOS(String newClient, String command) {
+	
+	/**
+	 * The ProcessBuilder.start() and Runtime.exec methods create a native process and 
+	 * return an instance of a subclass of 
+	 * <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html"><b>Process</b></a>
+	 * that can be used to control the process 
+	 * and obtain information about it.
+	 * 
+	 * <p>By default, the created subprocess does not have its own terminal or console.
+	 * All its standard I/O (i.e. stdin, stdout, stderr) operations will be redirected to the
+	 * parent process, where they can be accessed via the streams obtained using the methods 
+	 * getOutputStream(), getInputStream(), and getErrorStream(). The parent process uses these
+	 * streams to feed input to and get output from the subprocess. Because some native 
+	 * platforms only provide limited buffer size for standard input and output streams,
+	 * failure to promptly write the input stream or read the output stream of the subprocess 
+	 * may cause the subprocess to block, or even deadlock.</p>
+	 * 
+	 * <p>Note: Requires Java - 7,  If is server application then required Apache 8.
+	 */
+	public static void redirectStreamToFile(String jarLocation, List<String> commandLineArguments,
+			Map<String, String> systemProperties) {
+		
+		String runCommand = "java "
+				+ systemPropertiesMap( systemProperties )
+				+ " -jar " + jarLocation + " "
+				+ commandLineArgumentsList( commandLineArguments );
+		System.out.println("Run Command : ["+runCommand+"]");
+		ProcessBuilder pb = new ProcessBuilder( Arrays.asList( runCommand.split(" ") ) );
+		
+		File log = new File("D:\\log.txt");
+		pb.redirectErrorStream(true);
+		pb.redirectOutput(Redirect.appendTo(log));
 		try {
-			Process process = Runtime.getRuntime().exec( newClient+command);
+			Process p = pb.start();
+			assert pb.redirectInput() == Redirect.PIPE;
+			assert pb.redirectOutput().file() == log;
+			assert p.getInputStream().read() == -1;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void commandsOfOS(String newClient, String command) {
+		try {
+			Process process = Runtime.getRuntime().exec( newClient+command );
 			InputStream inputStream = process.getInputStream();
 			
 			SubProcessThread inputConsumer = new SubProcessThread( inputStream, true );
@@ -101,8 +138,9 @@ public class RunJARFile {
 		
 		System.out.println("Command-Line Arguments : "+ commandLineArgumentsList(commandLineArguments));
 		System.out.println("Environment Variables"+ systemPropertiesMap(systemProperties));
-		runtime(jarLocation, commandLineArguments, systemProperties);
-		builder(jarLocation, commandLineArguments, systemProperties);
+		//runtime(jarLocation, commandLineArguments, systemProperties);
+		//builder(jarLocation, commandLineArguments, systemProperties);
+		redirectStreamToFile(jarLocation, commandLineArguments, systemProperties);
 	}
 	
 	public static void list2StringArray(List<String> commandLineArguments ) {
@@ -144,19 +182,12 @@ public class RunJARFile {
 		try {
 			Process process = Runtime.getRuntime().exec( runCommand );
 			
-			Thread.sleep( 1000 * 5 );
-			process.destroy();
-			
 			InputStream inputStream = process.getInputStream();
-			SubProcessRunnable spr = new SubProcessRunnable( inputStream );
-			Thread thread = new Thread(spr, "StreamReader_ThreadID");
-			thread.start();
 			
-			int status = process.waitFor();
-			System.out.println("Exited with status: " + status);
+			processThread(process, inputStream);
+			//processRunnable(process, inputStream);
+			
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -193,10 +224,21 @@ public class RunJARFile {
 			
 			InputStream inputStream = process.getInputStream();
 			
-			SubProcessThread inputConsumer = new SubProcessThread( inputStream, true );
-			inputConsumer.start();
+			processThread(process, inputStream);
+			processRunnable(process, inputStream);
 			
-			Thread.sleep( 1000 * 5 );
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void processThread(Process process, InputStream inputStream) {
+		SubProcessThread inputConsumer = new SubProcessThread( inputStream, true );
+		inputConsumer.start();
+		
+		//Thread.sleep( 1000 * 5 );
+		try {
+			java.util.concurrent.TimeUnit.SECONDS.sleep(5);
 			process.destroy();
 			
 			int exitValue = process.waitFor();
@@ -207,10 +249,24 @@ public class RunJARFile {
 			
 			String processOuput = inputConsumer.output.toString();
 			System.out.println("OUT PUT «\n" + processOuput );
-			
 			//System.exit(0);
-		} catch (IOException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void processRunnable(Process process, InputStream inputStream) {
+		try {
+			
+			Thread.sleep( 1000 * 5 );
+			//process.destroy();
+			
+			SubProcessRunnable spr = new SubProcessRunnable( inputStream );
+			Thread thread = new Thread(spr, "StreamReader_ThreadID");
+			thread.start();
+			
+			int status = process.waitFor();
+			System.out.println("Exited with status: " + status);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

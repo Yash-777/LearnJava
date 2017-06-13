@@ -134,7 +134,6 @@ public class MailSenderSMTPGmail_Client {
 		return false;
 	}
 	
-	@SuppressWarnings("restriction")
 	public static Session getSessionObject(String mailhost, String mailport, boolean authProps) {
 		System.out.println("==- Outgoing Mail (SMTP) Server details like SMTP properties and Authenticate -==");
 		Properties props = new Properties();
