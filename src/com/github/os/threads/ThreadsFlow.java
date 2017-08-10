@@ -1,13 +1,16 @@
-package com.github.coreconcepts;
+package com.github.os.threads;
 
 /**
- * 1) A program in execution is often referred as process which requires separate address space and it .
- * A thread is a subset(part) of the process which shares same address space of its process.
- * 2) A process consists of multiple threads. A thread is a smallest part of the process that can 
- * execute concurrently with other parts(threads) of the process.
+ * <UL>
+ * <LI> A program in execution is often referred as process which requires separate address space and it .
+ * A thread is a subset(part) of the process which shares same address space of its process.</LI>
+ * <LI> A process consists of multiple threads. A thread is a smallest part of the process that can 
+ * execute concurrently with other parts(threads) of the process.</LI>
+ * </UL>
  * 
+ * <p><a href="https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/4_Threads.html">Reference Link</a>
  * @author yashwanth.m
- *
+ * 
  */
 public class ThreadsFlow {
 	public static void main(String[] args) {
@@ -39,7 +42,8 @@ public class ThreadsFlow {
 			}
 		});
 		
-		t1.setPriority(10);
+		//t1.setPriority(10);
+		t1.setPriority( Thread.MAX_PRIORITY );
 		t1.start();
 		
 		t2.setPriority(1);

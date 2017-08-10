@@ -1,0 +1,8 @@
+https://codepen.io/Yash777/pen/WEvyjg/
+
+https://jsfiddle.net/39xLt412/
+
+Bootstrap: Open Another Modal in Modal:
+	https://stackoverflow.com/q/19528173/5081877
+
+https://runkit.com/yash-777/5981a1f5d00f46001263de5d

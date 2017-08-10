@@ -34,6 +34,7 @@ import com.amazonaws.services.s3.transfer.Upload;
  * Here i am getting an pre-signed url to access that file which is not available in S3.
  * Here is their any method to get url as null [when the requested object is not available in S3]
  * 
+ * https://javatutorial.net/java-s3-example
  * @author yashwanth.m
  *
  */
@@ -55,21 +56,32 @@ public class S3Objects {
 						BasicAWSCredentials(props.getProperty("accessKey"), props.getProperty("secretKey"));
 						// PropertiesCredentials(resourceAsStream);
 		AmazonS3 s3Client = new AmazonS3Client( awsCreds );
-
+		
 		String s3_BucketName = props.getProperty("bucketname");
 		String folderPath_fileName = props.getProperty("path");
 		System.out.println("File Path : "+folderPath_fileName);
-		uploadObject(s3Client, s3_BucketName, folderPath_fileName);
-		//downloadObject(s3Client, s3_BucketName, folderPath_fileName);
-		//getSignedURLforS3File(s3Client, s3_BucketName, folderPath_fileName);
-		/*String url = getPreSignedURLAsString_Object(s3Client, s3_BucketName, folderPath_fileName);
-		System.out.println("Received response:"+url);*/
-		
-		/*String url = getPreSignedURLAsString_GetMetaData(s3Client, s3_BucketName, folderPath_fileName);
-		System.out.println("Received response:"+url);*/
-		
-		/*String url = getPreSignedURLAsString_DoesKeyExists(s3Client, s3_BucketName, folderPath_fileName);
-		System.out.println("Received response:"+url);*/
+		try {
+			
+			uploadObject(s3Client, s3_BucketName, folderPath_fileName);
+			//downloadObject(s3Client, s3_BucketName, folderPath_fileName);
+			//getSignedURLforS3File(s3Client, s3_BucketName, folderPath_fileName);
+			/*String url = getPreSignedURLAsString_Object(s3Client, s3_BucketName, folderPath_fileName);
+			System.out.println("Received response:"+url);*/
+			
+			/*String url = getPreSignedURLAsString_GetMetaData(s3Client, s3_BucketName, folderPath_fileName);
+			System.out.println("Received response:"+url);*/
+			
+			/*String url = getPreSignedURLAsString_DoesKeyExists(s3Client, s3_BucketName, folderPath_fileName);
+			System.out.println("Received response:"+url);*/
+		} catch(AmazonS3Exception auth){
+			System.out.println("Authentication details erroer : "+auth.getErrorMessage());
+			if( auth.getErrorCode().equalsIgnoreCase("SignatureDoesNotMatch") || auth.getStatusCode() == 403 ) {
+					//System.exit(0);
+				throw new RuntimeException("To terminate java program.");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static String getPreSignedURLAsString_DoesKeyExists(

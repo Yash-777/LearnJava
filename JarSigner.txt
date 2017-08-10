@@ -1,0 +1,27 @@
+https://docs.oracle.com/javase/tutorial/security/toolsign/step3.html
+
+C:\Program Files\Java\jdk1.6.0_45\bin>keytool.exe -genkey -keystore worldClasseskeys -alias yash
+Enter keystore password:
+Re-enter new password:
+What is your first and last name?
+  [Unknown]:  Yash
+What is the name of your organizational unit?
+  [Unknown]:  worldClasses
+What is the name of your organization?
+  [Unknown]:  IT
+What is the name of your City or Locality?
+  [Unknown]:  HYD
+What is the name of your State or Province?
+  [Unknown]:  TELANGANA
+What is the two-letter country code for this unit?
+  [Unknown]:  IN
+Is CN=Yash, OU=worldClasses, O=IT, L=HYD, ST=TELANGANA, C=IN correct?
+  [no]:  YES
+
+Enter key password for <yash>
+        (RETURN if same as keystore password):
+Re-enter new password:
+
+
+worldClasses_CodeSign «
+jarsigner.exe -keystore D:\worldClasseskeys.jks D:\Tomcats\tomcat-7.0.37\webapps\ROOT\LearnJava.jar yash

@@ -1,0 +1,30 @@
+@CHARSET "ISO-8859-1";
+
+/* @Styles.Render("")
+@Scripts.Render("") */
+
+input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"],
+input[type="email"], input[type="month"], input[type="number"], input[type="password"],
+input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"],
+textarea {
+	border-color: rgba(0,0,0,0.4);
+	background-color: rgba(255,255,255,0.4);
+}
+
+/* « Avoid user for selecting text on our site.
+https://css-tricks.com/almanac/properties/p/pointer-events/
+https://developer.mozilla.org/en/docs/Web/CSS/pointer-events
+The pointer-events CSS property specifies under what circumstances 
+(if any) a particular graphic element can become the target of mouse events.
+ */
+.avoid-clicks {
+  pointer-events: none;
+}
+
+/*
+ParentElem = perspective: 150px; ChildElem - transform: rotateX(45deg);
+*/
+
+/*
+jQuery Mobile « https://www.w3schools.com/jquerymobile/jquerymobile_intro.asp
+*/

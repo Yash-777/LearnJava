@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+AngularJS Select Box / Dropdown List Validation
+</title>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script>
+var app = angular.module('selectboxApp', []);
+app.controller('selectboxCtrl', function ($scope) {
+$scope.arrlist = [{
+"userid": 1,
+"name": "Suresh"
+}, {
+"userid": 2,
+"name": "Rohini"
+}, {
+"userid": 3,
+"name": "Praveen"
+}];
+$scope.checkselection = function () {
+if ($scope.userSelect != "" && $scope.userSelect != undefined)
+$scope.msg = 'Selected Value: '+$scope.userSelect;
+else
+$scope.msg = 'Please Select Dropdown Value';
+}
+});
+</script>
+</head>
+<body  ng-app="selectboxApp" ng-controller="selectboxCtrl">
+<div>
+<h3>AngularJS Select Box / Dropdown List Validation Example</h3>
+<select name="users" ng-model="userSelect">
+<option value="">--Select User--</option>
+<option ng-repeat="option in arrlist" value="{{option.userid}}">{{option.name}}</option>
+</select>
+</div><br /><br />
+<input type="button" value="Submit" ng-click="checkselection()" /><br /><br />
+<span style="color:red">{{msg}}</span><br />
+</body>
+</html>

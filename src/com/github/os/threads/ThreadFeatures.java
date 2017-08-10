@@ -1,7 +1,13 @@
-package com.github.coreconcepts;
+package com.github.os.threads;
 
 import java.util.Random;
 
+/**
+ * http://www.oracle.com/technetwork/articles/java/fork-join-422606.html
+ * 
+ * @author yashwanth.m
+ *
+ */
 public class ThreadFeatures {
 	public static void main(String[] args) {
 		ImplementsRunnable a = new ImplementsRunnable();
