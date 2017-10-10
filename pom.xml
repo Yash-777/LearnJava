@@ -9,8 +9,9 @@
 <properties>
 	<aws.java>1.10.77</aws.java>
 	<fasterxml.jackson>2.7.3</fasterxml.jackson>
+		<seleniumVersion>3.5.1</seleniumVersion>
 </properties>
-	
+
 <dependencies>
 	<!-- Mail -->
 	<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
@@ -20,150 +21,147 @@
 		<version>1.4.7</version>
 	</dependency>
 	
-	<!-- https://mvnrepository.com/artifact/xuggle/xuggle-xuggler -->
 	<!-- Changed to « http://www.dcm4che.org/maven2/xuggle/xuggle-xuggler/5.4/ -->
 	<!-- <dependency>
 		<groupId>xuggle</groupId>
 		<artifactId>xuggle-xuggler</artifactId>
 		<version>5.4</version>
 	</dependency> -->
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.6.4</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.3.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.3.1</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.3.1</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-io -->
 		<!-- <dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>1.3.2</version>
 		</dependency> -->
-		
-		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+	<!-- JavaScript « com.googlecode.json-simple/json-simple -->
+	<dependency>
+		<groupId>com.googlecode.json-simple</groupId>
+		<artifactId>json-simple</artifactId>
+		<version>1.1</version>
+	</dependency>
+	<!-- GSON « com.google.code.gson/gson -->
+	<dependency>
+		<groupId>com.google.code.gson</groupId>
+		<artifactId>gson</artifactId>
+		<version>2.8.0</version>
+	</dependency>
+	<!-- Simple JSON -->
+	<dependency>
+		<groupId>org.json</groupId>
+		<artifactId>json</artifactId>
+		<version>20090211</version>
+	</dependency>
 		
 	<!-- Send Server Request -->
-	<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
 	<dependency>
 		<groupId>org.apache.httpcomponents</groupId>
 		<artifactId>httpclient</artifactId>
 		<version>4.3</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
 	<dependency>
 		<groupId>commons-codec</groupId>
 		<artifactId>commons-codec</artifactId>
 		<version>1.6</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
 	<dependency>
 		<groupId>commons-logging</groupId>
 		<artifactId>commons-logging</artifactId>
 		<version>1.1.3</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore -->
 	<dependency>
 		<groupId>org.apache.httpcomponents</groupId>
 		<artifactId>httpcore</artifactId>
 		<version>4.3</version>
 	</dependency>
 	
-	<!-- https://mvnrepository.com/artifact/org.json/json -->
-	<dependency>
-		<groupId>org.json</groupId>
-		<artifactId>json</artifactId>
-		<version>20090211</version>
-	</dependency>
-
 	<!-- AWS Required Jars List:
 	 * [ aws-java{sdk, sdk-core, sdk-s3} - 1.10.68,
 	 * fasterxml.jackson{databind, core, annotations} - 2.7.3,
 	 * joda-time 2.7,
 	 * http{clent, core} - 4.3.4, commons-logging-1.1.1]
 	-->
-	<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
 	<dependency>
 		<groupId>com.amazonaws</groupId>
 		<artifactId>aws-java-sdk</artifactId>
 		<version>${aws.java}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-core -->
 	<dependency>
 		<groupId>com.amazonaws</groupId>
 		<artifactId>aws-java-sdk-core</artifactId>
 		<version>${aws.java}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
 	<dependency>
 		<groupId>com.amazonaws</groupId>
 		<artifactId>aws-java-sdk-s3</artifactId>
 		<version>${aws.java}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 	<dependency>
 		<groupId>com.fasterxml.jackson.core</groupId>
 		<artifactId>jackson-databind</artifactId>
 		<version>${fasterxml.jackson}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 	<dependency>
 		<groupId>com.fasterxml.jackson.core</groupId>
 		<artifactId>jackson-core</artifactId>
 		<version>${fasterxml.jackson}</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
 	<dependency>
 		<groupId>com.fasterxml.jackson.core</groupId>
 		<artifactId>jackson-annotations</artifactId>
 		<version>${fasterxml.jackson}</version>
 	</dependency>
 
-	<!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
 	<dependency>
 		<groupId>joda-time</groupId>
 		<artifactId>joda-time</artifactId>
 		<version>2.9.9</version>
 	</dependency>
+	<dependency>
+		<groupId>com.google.guava</groupId>
+		<artifactId>guava</artifactId>
+		<!-- https://github.com/grpc/grpc-java/issues/2721 « https://stackoverflow.com/q/42206440/5081877 -->
+		<!-- <version>19.0-rc3</version> -->
+		<version>21.0</version>
+	</dependency>
+	
 	
 	<!-- Data Base Connection Pool - DBCP2 -->
-	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
 	<dependency>
 		<groupId>org.apache.commons</groupId>
 		<artifactId>commons-dbcp2</artifactId>
 		<version>2.1.1</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
 	<dependency>
 		<groupId>org.apache.commons</groupId>
 		<artifactId>commons-dbcp2</artifactId>
 		<version>2.1.1</version>
 	</dependency>
-	<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 	<dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql-connector-java</artifactId>
@@ -171,18 +169,56 @@
 	</dependency>
 	
 	<!-- JMETER - XML -->
-	<!-- https://mvnrepository.com/artifact/org.apache.jmeter -->
 	<dependency>
-	    <groupId>org.apache.jmeter</groupId>
-	    <artifactId>jorphan</artifactId>
-	    <version>2.6</version>
+		<groupId>org.apache.jmeter</groupId>
+		<artifactId>jorphan</artifactId>
+		<version>2.6</version>
 	</dependency>
 	<dependency>
-	    <groupId>org.apache.jmeter</groupId>
-	    <artifactId>ApacheJMeter_core</artifactId>
-	    <version>2.11</version>
+		<groupId>org.apache.jmeter</groupId>
+		<artifactId>ApacheJMeter_core</artifactId>
+		<version>2.11</version>
 	</dependency>
 	
+	<!-- MICROSOFT AZURE - CLOUD STORAGE -->
+	<dependency>
+		<groupId>com.microsoft.azure</groupId>
+		<artifactId>azure-storage</artifactId>
+		<version>5.0.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.microsoft.azure</groupId>
+		<artifactId>azure-keyvault-core</artifactId>
+		<version>0.8.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-core</artifactId>
+		<version>2.6.0</version>
+	</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+	
+	<dependency>
+		<groupId>me.xuender</groupId>
+		<artifactId>unidecode</artifactId>
+		<version>0.0.7</version>
+	</dependency>
+
+	<!-- SELENIUM 3 - Automation -->
+	<!-- https://maven-repository.com/artifact/org.seleniumhq.selenium/selenium-server/3.5.1 -->
+	<dependency>
+		<groupId>org.seleniumhq.selenium</groupId>
+		<artifactId>selenium-server</artifactId>
+		<version>${seleniumVersion}</version>
+	</dependency>
+	<!-- 
+	<systemPath>${basedir}/libs/selenium-server-standalone-2.53.0.jar</systemPath>
+	<scope>system</scope>
+	 -->
 </dependencies>
 <build>
 	<sourceDirectory>src</sourceDirectory>

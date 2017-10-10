@@ -6,6 +6,15 @@
  * Adding Element to an element whose XPath is provided.
  *   https://stackoverflow.com/a/33669996/5081877
  */
+function removeTagAttibute( ) {
+	console.log('Tab Index');
+	var allTags = '*';
+	
+	var allelems = document.querySelectorAll( allTags );
+	for(i = 0, j = 0; i < allelems.length; i++) { 
+		allelems[i].removeAttribute( 'tabindex' );
+	}
+}
 
 function insertHTML_ByXPath( xpath, position, newElement) {
 	var element = document.evaluate(xpath, window.document, null, 9, null ).singleNodeValue;
@@ -14,7 +23,13 @@ function insertHTML_ByXPath( xpath, position, newElement) {
 }
 
 var xpath_DOMElement = '//*[@id="answer-33669996"]/table/tbody/tr[1]/td[2]/div';
-var childHTML = '<div id="Yash">Hi My name is <B>\"YASHWANTH\"</B></div>';
+var childHTML = 
+	'<div id="Yash">Hi My name is <B>\"YASHWANTH\"</B></div>';
+
+var divEle = document.createElement("div"); // Create li element.
+divEle.innerHTML = "Hi My name is <B>\"YASHWANTH\"</B>";
+var newElemAsString = new XMLSerializer().serializeToString(divEle);
+
 var position = 'beforeend';
 insertHTML_ByXPath(xpath_DOMElement, position, childHTML);
 

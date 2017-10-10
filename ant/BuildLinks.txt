@@ -1,0 +1,3 @@
+JavaScript Lint there is jslint4java which reports in XML format in the ANT Build process for any errors.
+	https://stackoverflow.com/q/7804728/5081877
+	https://eslint.org/

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- default="targetName" - is the name of the target to execute and
+those targets may depend on other tarets build success status. -->
+<project name="Jar Signing" default="certificate" basedir=".">
+
+	<property name="aliasName" value="Yash"/>
+	<property name="password" value="Yash@123"/>
+	<property name="keystoreFileName" location="yashjarsigncert.jks" /> <!-- keystoreFileName.jks -->
+	<property name="firstNameSurName" value="Yashwanth M"/>
+	<property name="organisationUnitOrDepartment" value=""/>
+	<property name="organisationName" value=""/>
+	<property name="cityOrLocality" value="Hyderabad"/>
+	<property name="stateOrProvince" value="Telangana"/>
+	<property name="twoLetterJavaLocaleCountryCode" value="TS"/>
+	
+	<!-- Custom build script that makes a keystore, finds all jars in the 'dist' directory and copies them into the 'distSigned' directory where they will be signed with the keystore. -->
+	<!-- Insert this code in your project's build.xml file just before the </project> tag. -->
+	<target name="certificate">
+	
+		<delete file="${keystoreFileName}" failonerror="false" />
+		<genkey alias="${aliasName}" storepass="${password}" keystore="${keystoreFileName}">
+			<dname>
+			<param name="CN" value="${firstNameSurName}"/>
+			<param name="OU" value="${organisationUnitOrDepartment}"/>
+			<param name="O"  value="${organisationName}"/>
+			<param name="L"  value="${cityOrLocality}"/>
+			<param name="ST"  value="${stateOrProvince}"/>
+			<param name="C"  value="${twoLetterJavaLocaleCountryCode}"/>
+			</dname>
+		</genkey>
+	
+	</target>
+	
+	<target name="signJars">
+		<delete dir="distSigned" failonerror="false" />
+		<mkdir dir="distSigned" />
+		<signjar destDir="distSigned"
+			alias="${aliasName}" keystore="${keystoreFileName}"
+			storepass="${password}" preservelastmodified="true">
+			
+			<path>
+				<fileset dir="dist" includes="*.jar" />
+			</path>
+			<flattenmapper />
+		</signjar>
+	</target>
+	
+	<!-- Ping localhost for 20 time for delay ant script -->
+	<target name="delay">
+		<exec executable="cmd.exe">
+			<arg line="/c ping 127.0.0.1 -n 20 > null"/>
+		</exec>
+	</target>
+	<!-- Tomcat Restarted -->
+	<target name="tomcat-restart">
+		<java classname="org.apache.catalina.startup.Bootstrap" fork="true">
+			<classpath path="${tomcat.home}/bin/bootstrap.jar:${tomcat.home}/bin/tomcat-juli.jar" />
+			<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+			<arg line="stop"/>
+		</java>
+		
+		<antcall target="delay"/>
+		
+		<exec executable="${tomcat.home}\bin\startup.bat">
+		</exec>
+		
+		<antcall target="delay"/>
+	</target>
+	
+	<property file="build.properties" />
+	<property name="build_dir" value="build"/>
+	<property name="classes_dir" value="classes"/>
+	<property name="jar_dir" value="jar"/>
+	<property name="signed_jar" value="jarsign"/>
+	<property name="jar-file-name" value="${project.name}"/>
+	<property name="source-dir" value="src" />
+	<property name="lib-dir" value="lib"/>
+	<property name="classes-directory" value="bin"/>
+	<property name="backup_location" value="backup"/>
+	<property name="jar_location" value="${tomcat.home}/webapps/ROOT"/>
+	
+	<!-- Class path to include all the jar files of application lib folder -->
+	<path id="compile.classpath">
+		<fileset dir="${lib-dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<target name="init">
+		<mkdir dir="${build_dir}/${classes_dir}"/>
+		<mkdir dir="${build_dir}/${jar_dir}"/>
+		<mkdir dir="${build_dir}/${signed_jar}"/>
+		<mkdir dir="${backup_location}"/>
+	</target>
+	<!-- compile -->
+	<target name="compile" depends="init" >
+		<javac includeantruntime="false" destdir="${build_dir}/${classes_dir}" debug="true" srcdir="${source-dir}">
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<copy todir="${build_dir}/${classes_dir}">
+				<fileset dir="${source-dir}">
+					<include name="**/*.*"/>
+				</fileset>
+		</copy>
+		<replace file="${build_dir}/${classes_dir}/config.properties">
+			<replacetoken>mongohost=localhost</replacetoken>
+			<replacevalue>mongohost=yash.github.com</replacevalue>
+		</replace>
+	</target>
+	<!-- Runnable Jar File -->
+	<target name="jar" depends="compile">
+		<jar basedir="${build_dir}/${classes_dir}" destfile="${build_dir}/${jar_dir}/${project.name}.jar">
+			<manifest>
+				<attribute name="Main-Class" value="${project.name}"/>
+			</manifest>
+		</jar>
+		<copy todir="${build_dir}/${jar_dir}">
+			<fileset dir="${lib-dir}">
+				<include name="**/*.*"/>
+			</fileset>
+		</copy>	
+	</target>
+</project>

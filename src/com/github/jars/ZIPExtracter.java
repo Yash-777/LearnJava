@@ -27,6 +27,9 @@ import com.github.os.Platform;
 
 /**
  * ZIPExtracter class is to extract the contents of a ZIP file.
+ * 
+ * JavaScript library to zip and unzip files http://gildas-lormeau.github.com/zip.js/
+ * 
  * @author yashwanth.m
  *
  */

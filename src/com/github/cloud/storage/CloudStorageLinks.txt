@@ -1,0 +1,15 @@
+OpenStack
+	https://docs.openstack.org/pike/user/
+
+S3
+	https://aws.amazon.com/blogs/aws/amazon-s3-object-expiration/
+	https://aws.amazon.com/blogs/developer/category/java/
+	
+SoftLayer - IBM (Cloud Storage)
+	https://sldn.softlayer.com/blog/waelriac/managing-softlayer-object-storage-through-rest-apis
+	https://www.ibm.com/cloud-computing/bluemix/pricing
+	https://stackoverflow.com/q/41611005/5081877
+	
+OracleCloud
+	https://github.com/oracle
+	http://www.oracle.com/webfolder/technetwork/tutorials/obe/cloud/objectstorage/upload_files_gt_5GB_java_client/upload_files_gt_5GB_java_client.html

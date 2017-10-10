@@ -2,8 +2,6 @@
  * Object, Array values for a key
  * https://stackoverflow.com/a/3357615/5081877
  */
-//
-
 var count = 0;
 while ( count < 4 ) {
 	var xpathsList = [];

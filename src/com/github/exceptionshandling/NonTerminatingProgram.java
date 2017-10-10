@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.http.conn.ClientConnectionManager;
 
@@ -17,7 +16,7 @@ import com.amazonaws.retry.PredefinedRetryPolicies;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.github.amazoneS3.S3Objects;
+import com.github.cloud.storage.S3Objects;
 
 /**
  * https://stackoverflow.com/a/18608092/5081877
@@ -34,7 +33,9 @@ import com.github.amazoneS3.S3Objects;
  * @author yashwanth.m
  *
  */
-public class NonTermicatingProgram {
+@SuppressWarnings("deprecation")
+public class NonTerminatingProgram {
+	@SuppressWarnings({ "unused" })
 	private static final List<ClientConnectionManager> connectionManagers = null;
 	static Properties props = new Properties();
 	static InputStream resourceAsStream;
@@ -50,7 +51,7 @@ public class NonTermicatingProgram {
 	
 	public static void main(String[] args) {
 		try {
-			new NonTermicatingProgram().s3RuntimeException();
+			new NonTerminatingProgram().s3RuntimeException();
 			System.out.println("---");
 			//Thread.setDefaultUncaughtExceptionHandler(null);
 			//Thread.currentThread().setDaemon(true);
@@ -95,7 +96,7 @@ public class NonTermicatingProgram {
 		System.out.println("File Path : "+folderPath_fileName);
 		try {
 			
-			com.github.amazoneS3.S3Objects.uploadObject(s3Client, s3_BucketName, folderPath_fileName);
+			com.github.cloud.storage.S3Objects.uploadObject(s3Client, s3_BucketName, folderPath_fileName);
 		} catch(AmazonS3Exception auth) {
 			System.out.println("Authentication details erroer : "+auth.toString());
 			if( auth.getErrorCode().equalsIgnoreCase("SignatureDoesNotMatch") || auth.getStatusCode() == 403 ) {

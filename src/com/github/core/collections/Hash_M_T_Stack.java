@@ -1,4 +1,4 @@
-package com.github.coreconcepts;
+package com.github.core.collections;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,6 +7,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * Differences between HashMap and Hashtable? « https://stackoverflow.com/q/40471/5081877
+ * Theory « https://stackoverflow.com/a/31243387/5081877
+ * @author yashwanth.m
+ *
+ */
 public class Hash_M_T_Stack {
 	public static void main(String[] args) {
 		new Thread() {

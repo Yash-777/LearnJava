@@ -8,7 +8,7 @@ import java.util.Random;
  * @author yashwanth.m
  *
  */
-public class ThreadFeatures {
+public class ThreadClass_RunnableInterface {
 	public static void main(String[] args) {
 		ImplementsRunnable a = new ImplementsRunnable();
 		

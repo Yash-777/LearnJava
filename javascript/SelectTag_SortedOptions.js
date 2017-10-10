@@ -31,6 +31,9 @@ function selectOptions() {
 selectOptions()
 </select>
 */
+var checkedValues = $('input:checkbox:checked').map(function() {
+    return this.value;
+}).get(); // https://stackoverflow.com/a/19766067/5081877
 
 var isForward = false, isBackward = false;
 function generatePath() {

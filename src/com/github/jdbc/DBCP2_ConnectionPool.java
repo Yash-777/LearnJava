@@ -50,7 +50,7 @@ public class DBCP2_ConnectionPool {
 				ds_dbcp2.setUrl( DB_URL );
 				ds_dbcp2.setUsername( DB_User );
 				ds_dbcp2.setPassword( DB_Password );
-				ds_dbcp2.setInitialSize( 5 );
+				ds_dbcp2.setInitialSize( 5 ); // ds_dbcp.setMaxActive( 5 );
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

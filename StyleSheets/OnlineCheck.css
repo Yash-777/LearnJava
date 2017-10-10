@@ -1,0 +1,9 @@
+/* 
+https://www.w3.org/TR/2012/WD-css3-regions-20120823/
+
+https://stackoverflow.com/q/7021085/5081877
+https://developer.mozilla.org/en-US/docs/Web/CSS/background-clip
+*/
+th {
+	background-clip: padding-box;
+}

@@ -50,7 +50,7 @@ public class RemoteClient {
 			@Override
 			public String handleResponse( final HttpResponse response) throws IOException {
 				int status = response.getStatusLine().getStatusCode();
-				if ( (status >= 200 && status <= 500) || status == 401 ){
+				if ( status >= 200 && status <= 500 ){
 					HttpEntity entity = response.getEntity();
 					return entity != null ? EntityUtils.toString(entity) : null;
 				}

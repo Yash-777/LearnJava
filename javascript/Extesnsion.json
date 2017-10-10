@@ -1,0 +1,37 @@
+/*
+ * manifest.json « https://www.youtube.com/watch?v=kpl-Ls26bpA
+ * https://www.youtube.com/watch?v=pT-b2SpFIWo
+
+ * Chrome API's - https://developer.chrome.com/extensions/api_index
+ * https://developer.chrome.com/extensions/api_other
+
+ * Manifest File Format - https://developer.chrome.com/extensions/manifest
+*/
+{
+	"name" : "My Extension",
+	"description": "This is the short description about m",
+	"icons": {
+	  "48": "icon_48.png",
+      "128": "icon_128.png"
+	},
+	"version": "1.0",
+	"manifest_version": 2,
+    "update_url": "http://clients2.google.com/service/update2/crx",
+
+   "browser_action": {
+      "default_icon": "icon_128.png",
+      "default_title": "Scirocco recorder for chrome™",
+	  "default_popup" : "/path/mypopup.html"
+   },
+   
+   "background": {
+      "page": "html/background.html" /* Which holds extensions main logic. */
+   },
+   "options_page": "html/options.html",
+   "permissions": [ "contextMenus", "tabs", "webRequest", "webRequestBlocking", "http://*/*", "https://*/*", "tts" ],
+   
+   "content_scripts": [ {
+      "js": [ "scripts/lib/jquery.min.js", "scripts/common/prototype_extension.js", "scripts/common/options.js", "scripts/common/utils.js",  ],
+      "matches": [ "\u003Call_urls>" ]
+   } ],
+}

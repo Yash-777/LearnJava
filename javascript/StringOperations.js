@@ -1,5 +1,9 @@
 /**
- * Reverse a String
+ * Reverse a String.
+ * String Replace with Multiple Characters list.
+ * 
+ * String contains SunString « https://stackoverflow.com/a/1789952/5081877
+ * == and === « https://stackoverflow.com/a/359509/5081877
  */
 
 /* ===== Using map to reverse a string ===== 
@@ -34,3 +38,23 @@ console.log('Array.from « Str:', str, '\t Reverse:', reverseStr );
 if( str == reverseStr ) console.log('Array.from « Both Strings are equal');
 if( str === reverseStr ) console.log('Array.from « Palindrome String');
 
+/* ===== String Replace with Multiple Characters list
+ * https://stackoverflow.com/a/16577007/5081877
+ * https://www.w3schools.com/jsref/jsref_regexp_g.asp
+ *  ===== */
+String.prototype.allReplace = function(obj) {
+	var retStr = this;
+	for (var x in obj) {
+		// http://wiki.tcl.tk/989
+		retStr = retStr.replace(new RegExp(x, 'g'), obj[x]);
+	}
+	return retStr;
+};
+
+var strReplace = '#this #is__ __#a test###__';
+strReplace = strReplace.allReplace({'#': '', '_': ''});
+console.log( strReplace );
+
+var caseSensitiveSTR = "Is this all there is?";
+caseSensitiveSTR = caseSensitiveSTR.replace(/\?/g, 'II');
+// "Is this all there isII"

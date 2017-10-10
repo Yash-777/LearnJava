@@ -1,4 +1,4 @@
-package com.github.amazoneS3;
+package com.github.cloud.storage;
 
 import java.io.File;
 import java.io.IOException;

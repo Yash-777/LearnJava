@@ -5,6 +5,17 @@
  * 
  * XPath/locator is a way of addressing an element by navigating through the Document tree structure.
  * 
+ *  The XPath language is based on a tree representation of the XML document,
+ *  and provides the ability to navigate around the tree, selecting nodes by a variety of criteria.
+ *  
+XML Path Language (XPath) « https://github.com/ilinsky/jquery-xpath
+	Version 1.0 « https://www.w3.org/TR/xpath/
+	2.0 (Second Edition) « https://www.w3.org/TR/xpath20/
+
+XPath Tester Online « document.evaluate( -- ) | $x( -- ) //https://stackoverflow.com/a/17082043/5081877
+	« https://www.freeformatter.com/xpath-tester.html
+	« http://videlibri.sourceforge.net/cgi-bin/xidelcgi
+
  * XPATH -https://stackoverflow.com/a/32201731/5081877
  *   Absolute XPath (/): /html/body/div[5]/div[4]
  *   Relative xpath (//): //div[@id=’social-media’]/ul/li[3]/a
@@ -37,9 +48,23 @@ function getPaths() {
 			singleTag.push(getFullXPath(allelems[i]));
 			singleTag.push(jsonData);
 			
+			/*setStyleOption( ele ); // For Input TAG.
+			if( ele.type="text" ) sendKeys( ele, 'Yash' );*/
+			
 			domTree.push(singleTag);
 	}
 	return domTree;
+}
+
+function setStyleOption( htmlEle ) {
+	htmlEle.style.setProperty( 'outline', "3px solid #45FF17","important");
+}
+function removeStyleOption( htmlEle ) {
+	htmlEle.style.removeProperty("outline");
+}
+
+function sendKeys( htmlEle, value ) {
+	htmlEle.value = value;
 }
 
 function getTagInfo(element){ 

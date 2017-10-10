@@ -29,9 +29,8 @@ public class DuplicateWordSearcher {
 			System.out.println(word + ": " + Collections.frequency(list, word));
 		}
 		
-		repeatedWordFromFile("FileData.txt");
+		repeatedWordFromFile("JarSigner.txt");
 	}
-	// "C:\\sample.txt"
 	static void repeatedWordFromFile(String fileName) {
 		//Creating wordCountMap which holds words as keys and their occurrences as values
 		HashMap<String, Integer> wordCountMap = new HashMap<String, Integer>();

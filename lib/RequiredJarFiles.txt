@@ -3,18 +3,18 @@ Required Files:
 <!-- Mail -->
 <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
 <dependency>
-    <groupId>javax.mail</groupId>
-    <artifactId>mail</artifactId>
-    <version>1.4.7</version>
+	<groupId>javax.mail</groupId>
+	<artifactId>mail</artifactId>
+	<version>1.4.7</version>
 </dependency>
 Note: If you are using JDK 1.6.0_10 or later then no need to worry about JAF,
 Which is included and available on javax.activation package. We suggest you use
 version 1.1.1 of JAF as if you use JDK version less than JDK 1.6.0_10.
 	<!-- https://mvnrepository.com/artifact/javax.activation/activation -->
 	<dependency>
-	    <groupId>javax.activation</groupId>
-	    <artifactId>activation</artifactId>
-	    <version>1.1.1</version>
+		<groupId>javax.activation</groupId>
+		<artifactId>activation</artifactId>
+		<version>1.1.1</version>
 	</dependency>
 
 xuggle-xuggler

@@ -1,10 +1,5 @@
 package com.github.singleObjects;
 
-import com.github.singleObjects.Default_SingleTon.A;
-import com.github.singleObjects.Default_SingleTon.B;
-import com.github.singleObjects.Default_SingleTon.C;
-import com.github.singleObjects.Default_SingleTon.D;
-
 /**
  * The class Default_SingleTon having private constructor, So that it can be accessed
  * only in current class. In static block we are creating object by allocating memory to

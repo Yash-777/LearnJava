@@ -17,7 +17,7 @@ import java.util.Map;
  * <P>JAR archive containing class and resource files for the application, 
  * with the startup class indicated by the Main-Class manifest header.
  * 
- * <P> Jar File Name : LearnJava.jar
+ * <P> Jar File Name : LearnJava.jar « <B>https://github.com/Yash-777/LearnJava/wiki/Java-Language</B> </P>
  * <UL> MANIFEST.MF
  * <LI>Manifest-Version: 1.0</LI>
  * <LI><a href='http://www.java67.com/2014/04/how-to-make-executable-jar-file-in-Java-Eclipse.html'>
@@ -43,7 +43,9 @@ import java.util.Map;
  * </UL>
  * 
  * <P><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jar.html">
- * Java Archive (JAR) files</a>
+ * Java Archive (JAR) files</a></P>
+ * 
+ * 
  * @author yashwanth.m
  *
  */

@@ -41,34 +41,17 @@ public class WebPageScreenShort {
 		
 		// determine current screen size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		System.out.println("Screen    Width : "+screenSize.width+"\t Height : "+screenSize.height);
+		System.out.format("Screen [W: %d, H: %d \n", screenSize.width, screenSize.height);
 		Rectangle screenRect = new Rectangle(0, 0, screenSize.width, screenSize.height);
-		BufferedImage image = robot.createScreenCapture(screenRect);		
+		BufferedImage image = robot.createScreenCapture(screenRect);
 		ImageIO.write(image, "png", new File(outFileName));
 		
-		/*Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-		BufferedImage capture = new Robot().createScreenCapture(screenRect);
-		ImageIO.write(capture, "bmp", new File("D:\\Screenshots\\ZZYYYYaltScreen.png"));*/
-	
 		System.out.println("Saved screen shot (" + image.getWidth() +" x " + image.getHeight() + " pixels) to file \"" +outFileName + "\".");
 		// use System.exit if the program hangs after writing the file; that's an old bug which got fixed only recently
 
 		//screenSHot();
 		
-		/*System.out.println("GraphicsEnvironment");
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice[] screens = ge.getScreenDevices();
-
-		Rectangle allScreenBounds = new Rectangle();
-		for (GraphicsDevice screen : screens) {
-		    Rectangle screenBounds = screen.getDefaultConfiguration().getBounds();
-		    allScreenBounds.width += screenBounds.width;
-		    allScreenBounds.height = Math.max(allScreenBounds.height, screenBounds.height);
-		}
-		BufferedImage screenShot = robot.createScreenCapture(allScreenBounds);
-		ImageIO.write(screenShot, "png", new File("D:\\Screenshots\\ZZQQQQQQQQQQaltScreen.png"));*/
-		
-		System.exit(0);
+		//System.exit(0);
 		process.destroy();
 	}
 	public static void screenSHot() throws AWTException, IOException, UnsupportedFlavorException{
