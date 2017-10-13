@@ -1,0 +1,125 @@
+Q: https://stackoverflow.com/questions/46708846/get-list-of-nodes-without-duplicates
+	https://stackoverflow.com/a/46710619/5081877
+
+XPATH TEST : http://videlibri.sourceforge.net/cgi-bin/xidelcgi
+
+[{  W3C « https://www.w3.org/TR/xpath/#path-abbrev
+	XPath Axes « https://www.w3schools.com/xml/xpath_axes.asp ~ [axisname::nodetest[predicate]]
+	
+	@* selects all the attributes of the context node
+	.. selects the parent of the context node
+}]
+
+With out parent access parent along with child content.
+	//name[.="DEF"] « Selects the node.
+	
+	//*[name/.='DEF'] « //name[.="DEF"]/parent::*
+	//city[name/.='DEF']
+	
+
+Non Duplicate Values:
+	distinct-values(//tr/td)
+
+Return Attribute Value:
+	//tr[1]/td/@location = "US" « Return value of @src, @href, @text
+
+starts-with & ends-with some value.
+	//tr/td[starts-with(@location,'U')]
+	//tr/td[starts-with(@location,'U') and parent::tr[@lang='en']]
+	//tr/td[ends-with(@location,'S') and parent::tr[@lang='en']]
+	
+Contains Text and InnerText & starts-with some value.
+	//table/*//td[.="following-"]
+	//table/*//td[text()="following-"]
+	//table/*//td[contains(text(),"following-")]
+	//table/*//td[contains(text(),"follow")]
+	
+	Elements containing text - [ true / false ] with 'preceding1' ][2] « true, ][1] « false
+		//table/*//td[contains(text(),'pre')][1]
+		
+		//table/*//td[contains(text(),'pre')][2] = "preceding1"
+		//table/*//td[contains(text(),'pre')][1] = "preceding1"
+	
+lastButOne Ele functions [position, last] «
+	//tr[last()]/td[position() < last()][last()] ~ //tr[last()]/td[last()]/preceding-sibling::td[1]
+	//tr[last()]/td[position() < last()-1][last()] ~ //tr[last()]/td[last()]/preceding-sibling::td[2]
+	//tr[last()]/td[position() < last()-2][last()] ~ //tr[last()]/td[last()]/preceding-sibling::td[3]
+
+Neighbors [preceding, following] or Siblings [preceding-sibling, following-sibling] of an Element «
+	Above|Before [preceding-sibling] the Current Ele « 
+		(//tr)[last()]/td[contains(text(),'Test Text')]/preceding-sibling::td[2]
+	Below|After [following-sibling] the Current Ele « 
+		//tr[td='Test Text'][2]/td[2]/following-sibling::td[1]
+		//tr[last()]//td[@location="US"]/following-sibling::node()
+		
+	//tr[td='Test Text'][2]/td[ preceding-sibling::td[contains(text(),'pre')] and following-sibling::td[contains(text(),'foll')] ]
+
+	//tr[td='Test Text'][2]/td[ preceding-sibling::td[contains(text(),'pre')] and following-sibling::td[.='following'] ]
+
+	//tr/td[.='Test Text' and preceding-sibling::td[contains(text(),'pre')] and following-sibling::td[.='following'] ]
+
+Elements parent[Just Parent, {..}] and Ansistors[Any of its Parent - parent, grandparent, etc.] «
+	//td[.='following11']/ancestor::tbody/tr[1]
+	//td[.='following11']/parent::*/parent::*/tr[1]
+
+	//td[@location="US"]/ancestor::node()/tr[2]
+	//td[@location="US"]/parent::node()/parent::node()/tr[2]
+	//td[@location="US"]/../../tr[2]
+	
+	//td[@location="US"]/../td[2]
+	
+	
+Elements Chlidren « descendant[descendant::axis],  descendant-or-self
+	{ // is short for /descendant-or-self::node()/ and 
+	div//para is short for div/descendant-or-self::node()/child::para }
+	
+	/descendant::td[@location='US'] « //td[@location='US']
+	/descendant::td[@location='US'][2] « (//td[@location='US'])[2]
+	//tr[@lang="en"]/descendant::td[@location='US'] « //tr[@lang="en"]/td[@location='US']
+	
+	//tr[@lang="en"]/descendant-or-self::td
+
+node and Child «
+	//tr[@lang="en"]/td/descendant::node()
+	//tr[@lang="en"]/descendant::node()
+	(//tr[@lang="en"]/td/descendant::node())[2]
+	//tr[@lang="en"]/descendant-or-self::node()/child::td[1]
+	
+	//tr[@lang="en"]/child::td[3]
+	
+Operator loop «
+	<table>
+		<template:loop>
+			<tr><td>{col:=text()}</td></tr>
+		</template:loop>
+	</table>
+
+	
+===== XML « https://codebeautify.org/xmlviewer/cb933924
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+	<tbody>
+		<tr lang="en">
+			<td location="US">preceding-</td>
+			<td>preceding1</td>
+			<td>Test Text</td>
+			<td>following-</td>
+			<td>following1-</td>
+		</tr>
+		<tr lang="te">
+			<td location="US">preceding</td>
+			<td>preceding1</td>
+			<td>Test Text</td>
+			<td>following</td>
+			<td>following1</td>
+		</tr>
+		<tr>
+			<td location="IND">preceding0</td>
+			<td>preceding11</td>
+			<td location="US"> Test Text </td>
+			<td>following0</td>
+			<td location="SRI">following11</td>
+		</tr>
+	</tbody>
+</table>
+=====
