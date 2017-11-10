@@ -9,7 +9,8 @@
 <properties>
 	<aws.java>1.10.77</aws.java>
 	<fasterxml.jackson>2.7.3</fasterxml.jackson>
-		<seleniumVersion>3.5.1</seleniumVersion>
+	<seleniumVersion>3.5.1</seleniumVersion>
+	<poi.version>3.17</poi.version>
 </properties>
 
 <dependencies>
@@ -215,10 +216,59 @@
 		<artifactId>selenium-server</artifactId>
 		<version>${seleniumVersion}</version>
 	</dependency>
-	<!-- 
+	<!--
 	<systemPath>${basedir}/libs/selenium-server-standalone-2.53.0.jar</systemPath>
 	<scope>system</scope>
-	 -->
+	-->
+	
+	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-text</artifactId>
+	    <version>1.1</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-client -->
+	<dependency>
+	    <groupId>com.sun.jersey</groupId>
+	    <artifactId>jersey-client</artifactId>
+	    <version>1.19</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.sun.jersey</groupId>
+	    <artifactId>jersey-server</artifactId>
+	    <version>1.19</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.sun.jersey</groupId>
+	    <artifactId>jersey-core</artifactId>
+	    <version>1.19</version>
+	</dependency>
+	
+	<!-- Reading .xls and .xlsx files -->
+	<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+	<dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi</artifactId>
+	    <version>${poi.version}</version>
+	</dependency>
+	<dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>${poi.version}</version>
+    </dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+	<dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-collections4</artifactId>
+	    <version>4.1</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+	<dependency>
+	    <groupId>commons-codec</groupId>
+	    <artifactId>commons-codec</artifactId>
+	    <version>1.11</version>
+	</dependency>
 </dependencies>
 <build>
 	<sourceDirectory>src</sourceDirectory>

@@ -14,10 +14,10 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-public class Selenium3 {
+public class Selenium_3 {
 	public static void main(String[] args) throws IOException {
 		String browserName = "firefox", firefoxVersion = "55", FF_DriverPack = "v0.19.0",
-				driverURLFormTomcatRoot = "http://testingapp3.clictest.com:8080/";
+				driverURLFormTomcatRoot = "http://testingapp.Yash.com:8080/";
 		
 		FirefoxProfile profile = new FirefoxProfile(); // about:support - Troubleshooting Information
 		DesiredCapabilities capabilities = new DesiredCapabilities();

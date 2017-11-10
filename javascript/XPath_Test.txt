@@ -5,14 +5,20 @@ XPATH TEST : http://videlibri.sourceforge.net/cgi-bin/xidelcgi
 
 [{  W3C « https://www.w3.org/TR/xpath/#path-abbrev
 	XPath Axes « https://www.w3schools.com/xml/xpath_axes.asp ~ [axisname::nodetest[predicate]]
+	https://www.w3.org/TR/1999/REC-xpath-19991116/#location-paths
 	
 	@* selects all the attributes of the context node
 	.. selects the parent of the context node
 }]
 
-With out parent access parent along with child content.
-	//name[.="DEF"] « Selects the node.
+count(//td[@lstype='124'])
+
+parent::child
+	//parentEle[.//anyChlild[@childid=123456]]/@parentid
+	(OR)
+	//anyChlild[@childid=123456]/parent::parentEle/@parentid
 	
+	//name[.="DEF"] « Selects the node.
 	//*[name/.='DEF'] « //name[.="DEF"]/parent::*
 	//city[name/.='DEF']
 	
@@ -24,9 +30,12 @@ Return Attribute Value:
 	//tr[1]/td/@location = "US" « Return value of @src, @href, @text
 
 starts-with & ends-with some value.
-	//tr/td[starts-with(@location,'U')]
-	//tr/td[starts-with(@location,'U') and parent::tr[@lang='en']]
-	//tr/td[ends-with(@location,'S') and parent::tr[@lang='en']]
+	Css Slector « div[class='cls'][id^='myid-']
+	
+	XPath « //div[@class='cls'][starts-with(@id, 'myid-')]
+			//tr/td[starts-with(@location,'U')]
+			//tr/td[starts-with(@location,'U') and parent::tr[@lang='en']]
+			//tr/td[ends-with(@location,'S') and parent::tr[@lang='en']]
 	
 Contains Text and InnerText & starts-with some value.
 	//table/*//td[.="following-"]

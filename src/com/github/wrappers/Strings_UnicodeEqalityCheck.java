@@ -13,6 +13,7 @@ import me.xuender.unidecode.Unidecode;
  * UNICODE - http://www.unicode.org/standard/WhatIsUnicode-more.html
  * http://www.online-toolz.com/tools/text-unicode-entities-convertor.php
  * 
+ * https://stackoverflow.com/a/46118158/5081877
  * http://r12a.github.io/apps/conversion/
  * 
  * @author yashwanth.m

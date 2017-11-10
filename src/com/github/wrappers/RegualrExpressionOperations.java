@@ -9,6 +9,8 @@ import com.google.common.base.CharMatcher;
 
 /**
  * https://docs.rs/regex/0.2.2/regex/
+ * https://www.regular-expressions.info/java.html
+ * http://www.regular-expressions.info/unicode.html
  * 
  * @author yashwanth.m
  *
@@ -25,21 +27,60 @@ public class RegualrExpressionOperations {
 		// getDigitValue();
 		// sequenceMatch();
 	}
+	static void browserVersionRange() {
+		String ff = "49";
+		System.out.println( ff.matches("[0-9]+") );
+		System.out.println( ff.length() );
+		if (ff.matches("[0-9]+")) {
+			int parseInt = Integer.parseInt(ff);
+			System.out.println( "Int : "+ parseInt );
+			
+			if ( parseInt <= 47 ) {
+				System.out.println("Marinto Driver");
+			} else if ( parseInt > 47 ) {
+				System.out.println("Gecho Driver");
+			}
+		}
+	}
+	static void replceSlashes() {
+		String xapthJSON = 
+				"//window[2]//header[@id=\"top\"]/div[1]/nav[1]/ul[1]/li[1]/a[1]";
+				//"//window[2]//header[@id=\\\\\'top\\\\\']/div[1]/nav[1]/ul[1]/li[1]/a[1]";
+		
+		for (int i = 0; i < 5; i++) {
+			xapthJSON = xapthJSON.replaceAll("\"", "\'");
+			
+			// As the windows navigation forward and backward this replace takes place.
+			xapthJSON = xapthJSON.replaceAll("\'", "\\\\\'");
+			System.out.println("\t « "+xapthJSON);
+		}
+		
+		System.out.println("xapthJSON \n\t"+xapthJSON);
+		
+		
+		/*String missingSemicolonEx = "";
+				// (String) jse.executeScript("return sessionStorage.capturedXPaths;");
+		if (missingSemicolonEx != null && !missingSemicolonEx.equalsIgnoreCase("undefined")) {
+			xapthJSON = missingSemicolonEx.replaceAll("\'", "\\\\\'");
+		}*/
+	}
 	static void sequenceMatch() { // https://stackoverflow.com/a/31242852/5081877
 		String[] str = {"MCDL", "XMLIVD", "ABXMLVA", "XMLABCIX"}; 
 		Pattern p = Pattern.compile("^(M|D|C|L|X|V|I|i|v|x|l|c|d|m)+$");
 		// Returns: true if, and only if, the entire region sequence matches this matcher's pattern
 		for (String sequence : str ) {
 			boolean match = false, find = false;
-			if ( !p.matcher(sequence).matches() ) match = true;
-			if (p.matcher(sequence).find())       find = true;
+			Matcher matcher = p.matcher( sequence );
+			if ( !matcher.matches() ) match = true;
+			if ( matcher.find() )     find = true;
 			
 			System.out.format("%s \t Match[%s] Find[%s]\n", sequence, match, find);
 		}
 	}
 	static boolean pathContainsSubPath(String xpath) {
 		// Make an RE pattern to match as a word only (\b=word boundary)
-		// String patt = "\\bfavor\\b";
+		// String patt = "\\bfavor\\b"; 
+		//div[2]/p[1]/select[1]/option[2]/div"; « //p[1]/select[1]/option[2]";
 		
 		Pattern p = Pattern.compile(".*/p.*/select.*/option.*");
 		Matcher m = p.matcher( xpath );

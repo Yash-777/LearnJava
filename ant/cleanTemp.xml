@@ -5,7 +5,7 @@
 	<!-- C:\Users\yashwanth.m\AppData\Local\Temp -->
 	<property environment="env"/>
 	<target name="showtemp">
-		<echo message="java.io.tmpdir = java.io.tmpdir}"/>
+		<echo message="java.io.tmpdir = ${java.io.tmpdir}"/>
 		<echo message="windows tmpdir = ${env.TMP}"/>
 		<echo message="windows JAVA_HOME = ${env.JAVA_HOME}"/>
 		<echo message="windows ANT_HOME = ${env.ANT_HOME}"/>

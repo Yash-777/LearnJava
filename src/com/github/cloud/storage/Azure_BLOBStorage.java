@@ -46,7 +46,7 @@ public class Azure_BLOBStorage {
 	static void checkContainerPermissions() {
 	  try {
 		Properties props = new Properties();
-		props.load(Azure_BLOBStorage.class.getClassLoader().getResourceAsStream("azure.properties"));
+		props.load(Azure_BLOBStorage.class.getClassLoader().getResourceAsStream("azure_auth.properties"));
 		
 		storageConnectionString = "DefaultEndpointsProtocol="+props.getProperty("DefaultEndpointsProtocol")+
 								"; AccountName="+props.getProperty("AccountName")+

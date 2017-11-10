@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+
+<project name="tomcat" default="local-tomcat-start" basedir=".">
+
+	<tstamp prefix="build-info">
+		<format property="current-date" pattern="dd-MM-yyyy" locale="en" />
+		<format property="current-time" pattern="hh:mm:ss" locale="en" />
+	</tstamp>
+	
+	<property file="build.properties" />
+	<property name="tomcat.home" value="${tomcat.location}" />
+	<property name="backUP.folder" value="${code.backup}/${current-date}_${current-time}" />
+	<property name="build_dir" value="${tomcat.home}/webapps" />
+	<property name="war-file-name" value="${project.name}" />
+	<property name="classes_dir" value="${war-file-name}/WEB-INF/classes" />
+	
+	<property environment="env"/>
+	<target name="run">
+		<!-- https://stackoverflow.com/a/19909940/5081877 -->
+		<exec executable="cmd" failonerror="true">
+			<env key="MY_VAR" value="SOME_VAL"/>
+			<env key="CATALINA_BASE" value="${tomcat.home}" />
+			<env key="JAVA_HOME" value="${java.jdk}" />
+			<env key="JRE_HOME"  value="${java.jdk}" />
+			<arg value="/c"/>
+			<arg value="echo %MY_VAR%"/>
+			<arg value="windows JAVA_HOME = ${env.JAVA_HOME}"/>
+			<arg value="windows JRE_HOME = ${env.JRE_HOME}"/>
+		</exec>
+		
+		<echo message="java.io.tmpdir = ${java.io.tmpdir}"/>
+		<echo message="windows tmpdir = ${env.TMP}"/>
+		<echo message="windows JAVA_HOME = ${env.JAVA_HOME}"/>
+		<echo message="windows JRE_HOME = ${env.JRE_HOME}"/>
+		<echo message="windows ANT_HOME = ${env.ANT_HOME}"/>
+	</target>
+	
+	<!-- Add this jar's to class path [bootstrap.jar, common-daemon.jar, tomcat-juli.jar]
+	befor starting tomcat. -->
+	<path id="catalina-ant-classpath">
+		<fileset dir="${tomcat.home}/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${tomcat.home}/bin">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	<!-- http://ant.apache.org/manual/tutorial-writing-tasks.html -->
+	<!-- taskdef class org.apache.catalina.ant.StopTask cannot be found using the classloader AntClassLoader -->
+	<taskdef name="start" classname="org.apache.catalina.ant.StartTask">
+		<classpath refid="catalina-ant-classpath"/>
+	</taskdef>
+	<target name="remote-tomcat-start" description="start application in tomcat">
+		<start url="${manager.url}" username="${manager.username}"
+			password="${manager.password}" path="/${project.name}" />
+	</target>
+	
+	<!-- http://lakjeewa.blogspot.in/2014/04/start-up-shutdown-or-restart-tomcat.html -->
+	<target name="local-tomcat-restart">
+		<antcall target="local-tomcat-stop" />
+		<antcall target="local-tomcat-start" />
+	</target>
+	<target name="local-tomcat-start" depends="local-tomcat-file-replace">
+		<java classname="org.apache.catalina.startup.Bootstrap" fork="true">
+			<classpath path="${tomcat.home}/bin/bootstrap.jar:${tomcat.home}/bin/tomcat-juli.jar" />
+			<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+			<!--If you are getting any OutOfMemoryError, remove the comments 
+			and enable jvm argument of the following line-->
+			<!--jvmarg value="-XX:MaxPermSize=256m"/-->
+		</java>
+	</target>
+	<target name="local-tomcat-stop">
+		<java classname="org.apache.catalina.startup.Bootstrap" fork="true">
+			<classpath path="${tomcat.home}/bin/bootstrap.jar:${tomcat.home}/bin/tomcat-juli.jar" />
+			<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+			<arg line="stop"/>
+		</java>
+	</target>
+	
+	<!--Rename strings in properties files -->
+	<target name="local-tomcat-file-replace" depends="local-tomcat-stop">
+		<replace file="${build_dir}/${classes_dir}/config.properties">
+			<replacetoken>localhost:8080</replacetoken>
+			<replacevalue>127.0.0.1:8080</replacevalue>
+		</replace>
+	</target>
+</project>
