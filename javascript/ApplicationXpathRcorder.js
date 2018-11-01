@@ -24,6 +24,9 @@
  * document.evaluate(path, top, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
  * 
  * Event Bubbling and Capturing « https://javascript.info/bubbling-and-capturing
+ * 
+ * Google Chrome Extension: highlight the div that the mouse is hovering over
+ * https://stackoverflow.com/a/4446039/5081877
  */
 function description() {
 	//spy_Events.attachKeydown();
@@ -38,6 +41,8 @@ var spy_onMouse_Event = '',
 	spyEdditor_XPath = '', spy_Status = '',
 	spyEdditor_XPathEle = '',
 	bubblingCount = 0;
+
+var initialEventEle = 0;
 
 var xpathsList = new Array();
 var useCapturing = true; // Add and Remove my own click event with some id.
@@ -254,13 +259,71 @@ var spy_Events = {
 					tagIndex = null;
 				}
 				
-				// Get Current Tag Text and replace special characters.
-				var tagText = e.textContent.replace(/&amp;/g,'&').trim();
+				tagIndex = ( tagIndex ) ? ('[' + tagIndex + ']') : '';
 				
-				if( currentTagName == 'BUTTON' && tagText && path == '' ) { // 'A', 'SPAN'
-					path = '/' + currentTagName.toLowerCase() + "[.=\""+tagText+"\"]";
+				// Ex: //main[1]/div[1]/article[1]/h2[@name='nameNode'][@type='input'][1]
+				// path == '' means add to last element only.
+				if( path == '' ) {
+					path = '/' + currentTagName.toLowerCase();
+					
+					var idValue = undefined; // e.id;
+					var classVlaue = undefined; // e.className;
+					var nameVlaue = e.name;
+					var typeVlaue = e.type;
+					
+					/* attributes:NamedNodeMap « length:4 « https://www.w3schools.com/xml/dom_namednodemap.asp
+						0:id [nodeName:"id",value:"Summary"]
+						1:name [nodeName:"name",value:"nameNode"]
+						2:class [nodeName:"class",value:"classnode"]
+						3:type [nodeName:"type",value:"input"]
+					*/
+					//if( nameVlaue == undefined || typeVlaue == undefined ) {
+						var attributeList = e.attributes;
+						var mapType = attributeList.getNamedItem('type');
+						var mapName = attributeList.getNamedItem('name');
+						if( mapType !=  null && mapType != '' ) {
+							// <input type='BUTTON' />
+							// typeVlaue = 'button', mapType = 'BUTTON'
+							if( typeVlaue != undefined && mapType != typeVlaue) {
+								typeVlaue = mapType.value;
+							}
+						}
+						if( mapName !=  null && mapName != '' ) {
+							if( nameVlaue != undefined && mapName != nameVlaue) {
+								nameVlaue = mapName.value;
+							}
+						}
+					//}
+				
+					// Get Current Tag Text and replace special characters.
+					var tagText = e.textContent.replace(/&amp;/g,'&').trim();
+					// Button with innerText Value Ex: Submit, Login ...
+					if( tagText && currentTagName == 'BUTTON' && currentTagName == 'NOBR') {
+						path += "[.=\""+tagText+"\"]";
+					}
+					
+					if( idValue != undefined && idValue != '') {
+						path += "[@id='"+idValue+"']";
+						if( classVlaue != undefined && classVlaue != '') {
+							path += "[@class='"+classVlaue+"']";
+						}if( nameVlaue != undefined && nameVlaue != '') {
+							path += "[@name='"+nameVlaue+"']";
+						}
+					} else if( classVlaue != undefined && classVlaue != '') {
+						path += "[@class='"+classVlaue+"']";
+						if( nameVlaue != undefined && nameVlaue != '') {
+							path += "[@name='"+nameVlaue+"']";
+						}
+					} else if( nameVlaue != undefined && nameVlaue != '') {
+						path += "[@name='"+nameVlaue+"']";
+						if( typeVlaue != undefined && typeVlaue != '') {
+							path += "[@type='"+typeVlaue+"']";
+						}
+					} else if( typeVlaue != undefined && typeVlaue != '') {
+						path += "[@type='"+typeVlaue+"']";
+					}
+					path += tagIndex;
 				} else {
-					tagIndex = ( tagIndex ) ? ('[' + tagIndex + ']') : '';
 					path='/' + currentTagName.toLowerCase() + tagIndex + path;
 				}
 				
@@ -270,7 +333,7 @@ var spy_Events = {
 				// We are going to break the loop if we find Unique Locator in DOM.
 				if( uniquePathCount.numberValue == 1 ) {
 					// path  = '//window['+window_size+']/'+path;
-					 path  = '/'+path;
+					path  = '/'+path;
 					spyEdditor_XPath = path;
 					break; // To Break for loop.
 				}

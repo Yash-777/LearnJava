@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import sun.awt.RepaintArea;
-
 public class DuplicateWordSearcher {
 
 	public static void main(String[] args) {

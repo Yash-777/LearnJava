@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- default="targetName" - is the name of the target to execute and
+those targets may depend on other tarets build success status. -->
+<project name="Jar Signing" default="reSign" basedir="." >
+	
+	<!-- ===================== Initialize Property Values =================== -->
+	<tstamp><format property='build.time' pattern='yyyy-MM-dd HH:mm:ss'/></tstamp>
+	
+	
+	<!-- ===== File: selenium-server-standalone-3.5.0.jar ===== -->
+	<property file="build.properties" />
+	<property name="library.file" value="${SeleniumServerFile}"/>
+	<property name="build.current.dir"  value="${JarFiles}"/>
+	
+	<property name="build.output.dir"   value="${build.current.dir}/singedJars"/>
+	<property name="library.path" value="${build.current.dir}/${library.file}" />
+	<property name="library.path.new" value="${build.output.dir}/${library.file}"/>
+
+	<!-- ===== BUILD: Create Directories ===== -->
+	<target name="createDir">
+		<mkdir dir="${build.output.dir}"/>
+	</target>
+
+	<target name="reSign" depends="createDir">
+		<echo>Avoiding duplicate files for Jar signing</echo>
+		<!-- https://ant.apache.org/manual/Tasks/zip.html
+		https://ant.apache.org/manual/Types/zipfileset.html -->
+		<jar destfile="${library.path.new}" update="true" duplicate="preserve">
+			<zipfileset src="${library.path}">
+				<!-- <exclude name="about.html"/> -->
+			</zipfileset>
+		</jar>
+	</target>
+
+</project>

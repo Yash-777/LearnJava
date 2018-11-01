@@ -1,12 +1,14 @@
 package com.github.java8;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  *
@@ -31,7 +33,41 @@ public class LambdaExpression {
 		/*Threads_Implementing_Runnable();
 		Iterating_Over_List();
 		stringPredictions();*/
-		intPredictions();
+		//intPredictions();
+		
+		Random random = new Random();
+		random.ints().limit(5).sorted().forEach(System.out::println);
+		
+		// Static Reference @FunctionalInterface « <arg1, arg2, return>
+		BiFunction<Integer, Integer, Integer> args2WithRetunVal = LambdaExpression::add;
+		Integer applyArgs = args2WithRetunVal.apply(10, 20);
+		System.out.println("Accepts two arguments and produces a result : "+ applyArgs);
+		
+		Function<Integer, Integer> args1WithRetunVal = LambdaExpression::add10;
+		Integer applyArgument = args1WithRetunVal.apply(10);
+		System.out.println("Accepts one argument and produces a result : "+ applyArgument);
+		
+		Consumer<Integer> args1WithNoReturnVal = LambdaExpression::printVlaue;
+		args1WithNoReturnVal.accept(10);
+		
+		// Instance Reference
+		Consumer<Integer> args1WithNoReturnVal_OBJ = new LambdaExpression()::printVlaue_obj;
+		args1WithNoReturnVal_OBJ.accept(20);
+	}
+	public static int add(int a, int b){
+		return a+b;
+	}
+	public static int add10(int a){
+		return a+10;
+	}
+	public static void printVlaue(int a){
+		System.out.println("accepts a single input argument and returns no result."+ a);
+	}
+	public void printVlaue_obj(int a){
+		System.out.println("OBJ « accepts a single input argument and returns no result."+ a);
+	}
+	public void printnMsg(){
+		System.out.println("Hello, this is instance method");
 	}
 	/**
 	 * range(3,5) = 4
@@ -44,6 +80,7 @@ public class LambdaExpression {
 		List<Integer> intList = Arrays.asList(5, 7, 4, 6, 1, 2);
 		// (As Used Range - ) IllegalStateException: stream has already been operated upon or closed
 		// Stream<Integer> stream = intList.stream();
+		// https://stackoverflow.com/a/32820927/5081877
 		IntPredicate predicate  = arg -> intList.stream().anyMatch( streamVal -> arg % streamVal == 0 );
 		int sum = IntStream.range(3, 15).filter( predicate ).sum();
 		System.out.println("Sum : "+sum);

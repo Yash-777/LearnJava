@@ -4,6 +4,7 @@ OpenStack
 S3
 	https://aws.amazon.com/blogs/aws/amazon-s3-object-expiration/
 	https://aws.amazon.com/blogs/developer/category/java/
+	https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html
 	
 SoftLayer - IBM (Cloud Storage)
 	https://sldn.softlayer.com/blog/waelriac/managing-softlayer-object-storage-through-rest-apis

@@ -1,7 +1,12 @@
+XPATH TEST : http://videlibri.sourceforge.net/cgi-bin/xidelcgi
+$x() - https://developers.google.com/web/tools/chrome-devtools/console/command-line-reference#xpath
+
 Q: https://stackoverflow.com/questions/46708846/get-list-of-nodes-without-duplicates
 	https://stackoverflow.com/a/46710619/5081877
 
-XPATH TEST : http://videlibri.sourceforge.net/cgi-bin/xidelcgi
+var path = "//tr[starts-with(@id, 'r1_MainBody')]/td[2]";
+var elem = document.evaluate(path, window.document, null, 9, null ).singleNodeValue;
+console.log(elem.innerHTML);
 
 [{  W3C « https://www.w3.org/TR/xpath/#path-abbrev
 	XPath Axes « https://www.w3schools.com/xml/xpath_axes.asp ~ [axisname::nodetest[predicate]]

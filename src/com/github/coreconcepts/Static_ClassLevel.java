@@ -19,6 +19,5 @@ public class Static_ClassLevel {
 		Static_ClassLevel.Static_Member_Class.sm();
 		System.out.println("variable : "+a);
 		System.out.println("variable : "+Static_Member_Class.a);
-		
 	}
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MyProject" default="timespan" basedir=".">
+	
+	<tstamp prefix="build-info">
+		<format property="current-date" pattern="EEE, dd-MMMM-yy" locale="en" />
+		<format property="current-time" pattern="hh:mm:ss a z" locale="en" />
+		<format property='build.timeFolder' pattern='yyyyMMMdd_HH_mm'/>
+	</tstamp>
+	
+	<property file="build.properties" />
+	
+	<!-- https://ant.apache.org/manual/running.html
+		D:\ant\build>ant -p -buildfile=timeStamp.xml -->
+	<property name="builder" value="Yashwanth" />
+	<target name="timespan" depends="">
+		<echo>builder = ${builder}</echo>
+		<echo>current-date = ${build-info.current-date}</echo>
+		<echo>current-time = ${build-info.current-time}</echo>
+		
+		<mkdir dir="${build-info.build.timeFolder}" />
+	</target>
+
+</project>

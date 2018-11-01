@@ -1,3 +1,52 @@
 JavaScript Lint there is jslint4java which reports in XML format in the ANT Build process for any errors.
 	https://stackoverflow.com/q/7804728/5081877
 	https://eslint.org/
+	
+http://ant-contrib.sourceforge.net/
+https://stackoverflow.com/a/1468063/5081877
+
+http://nant.sourceforge.net/release/0.85/help/tasks/foreach.html
+
+=====================
+D:\ant\build>ant -buildfile=timeStamp.xml
+D:\ant\build>ant -p -buildfile=timeStamp.xml
+	Use option -p to see a list of targets.
+=====================
+C:\Users\yashwanth.m>echo %ANT_HOME%
+	D:\Yashwanth\D Drive\Apache\apache-ant-1.9.4
+
+C:\Users\yashwanth.m>echo %PATH%
+	C:\Program Files\TortoiseSVN\bin;C:\Program Files\Java\jdk1.8.0_144\bin;
+	C:\Program Files\MongoDB\Server\3.2\bin;C:\Program Files\nodejs\;
+	C:\Users\yashwanth.m\AppData\Local\Microsoft\WindowsApps;C:\Users\yashwanth.m\AppData\Roaming\npm;
+	D:\Yashwanth\D Drive\Apache\apache-ant-1.9.4\bin;
+
+C:\Users\yashwanth.m>ant -diagnostics
+	sun.boot.library.path : C:\Program Files\Java\jre1.8.0_144\bin
+	java.home : C:\Program Files\Java\jre1.8.0_144
+
+	java.ext.dirs : C:\Program Files\Java\jre1.8.0_144\lib\ext;C:\WINDOWS\Sun\Java\lib\ext
+	sun.boot.class.path : C:\Program Files\Java\jre1.8.0_144\lib\resources.jar;C:\Program Files\Java\jre1.8.0_144\lib\rt.jar;C:\Program Files\Java\jre1.8.0_144\lib\sunrsasign.jar;C:\Program Files\Java\jre1.8.0_144\lib\jsse.jar;C:\Program Files\Java\jre1.8.0_144\lib\jce.jar;C:\Program Files\Java\jre1.8.0_144\lib\charsets.jar;C:\Program Files\Java\jre1.8.0_144\lib\jfr.jar;C:\Program Files\Java\jre1.8.0_144\classes
+
+
+C:\Users\yashwanth.m>ant -version
+	Unable to locate tools.jar. Expected to find it in C:\Program Files\Java\jre1.8.0_144\lib\tools.jar
+	Apache Ant(TM) version 1.9.4 compiled on April 29 2014
+	
+C:\Users\yashwanth.m>set "JAVA_HOME=C:\Program Files\Java\jdk1.8.0_144;"
+
+C:\Users\yashwanth.m>echo %JAVA_HOME%
+	C:\Program Files\Java\jdk1.8.0_144;
+
+Links «
+	https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jdkfiles.html
+	
+	/jdk1.8.0/bin
+		Executables for all the development tools contained in the JDK. The PATH environment variable should contain an entry for this directory.
+		
+	/jdk1.8.0/jre
+		Root directory of the Java Runtime Environment (JRE) used by the JDK development tools. The runtime environment is an implementation of the Java platform. This is the directory referred to by the java.home system property.
+		
+Ubuntu 14.04 x64 «
+	sudo apt-get install openjdk-7-jdk openjdk-7-jre
+	sudo su -

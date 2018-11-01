@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Java Environment Variables" default="showtemp" basedir=".">
+	<!-- https://stackoverflow.com/questions/18926846/how-to-get-the-user-temp-directory-in-ant -->
+	<!-- C:\Users\yashwanth.m\AppData\Local\Temp -->
+	<property environment="env"/>
+	<target name="showtemp">
+		<echo>Java Environment Variables</echo>
+		<echo message="java.io.tmpdir = ${java.io.tmpdir}"/>
+		<echo message="windows tmpdir = ${env.TMP}"/>
+		<echo message="windows JAVA_HOME = ${env.JAVA_HOME}"/>
+		<echo message="windows ANT_HOME = ${env.ANT_HOME}"/>
+	</target>
+</project>

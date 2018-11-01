@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- Patch of Code. OTRS tool ticketing system [Xaamp htdocx solutions php files]
+Old Build					Ticket					Builds BackUP
+|-Main Task	 				|-Main Task				  TimeStampDateFolder
+		|-a1					|-a1               Backup OldbuildFile
+			|-T1.txt				|-T1.txt       Based on Ticket Files.
+			|-T2.txt
+			|-b1					|-b1
+				|-T1.txt				|-T1.txt
+				|-T2.txt				|-T3.txt [New File build fails]
+		|-a2
+			|-T1.txt
+			|-T2.txt
+			
+[_Oracle Nashorn_](http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html) _as a command-line tool and as an embedded interpreter in Java applications_<sup>[wiki](https://en.wikipedia.org/wiki/Nashorn_(JavaScript_engine))</sup>
+
+Nashorn is a JavaScript<sup>ECMA-compliant</sup> engine developed in the Java programming language by Oracle. It is based on the [_Da Vinci Machine_](https://en.wikipedia.org/wiki/Da_Vinci_Machine) (JSR 292) and has been released with Java 8. _
+[`jdk.nashorn.api.scripting.NashornScriptEngine`](https://www.javatips.net/api/openjdk-master/nashorn/src/jdk.scripting.nashorn/share/classes/jdk/nashorn/api/scripting/NashornScriptEngine.java) <sup>[openjdk](http://cr.openjdk.java.net/~sundar/8037400/webrev.01/src/jdk/nashorn/api/scripting/)</sup>
+
+_Until Java SE 7, JDKs shipped with a JavaScript scripting engine based on Mozilla Rhino. Java SE 8 will instead ship with a new engine called Oracle Nashorn, which is based on JSR 292 and invokedynamic. It provides better compliance with the ECMA normalized JavaScript specification and better runtime performance through invokedynamic-bound call sites._
+
+[_Nashorn extensions_](https://wiki.openjdk.java.net/display/Nashorn/Nashorn+extensions) and some of [_Rhino_](https://wiki.openjdk.java.net/display/Nashorn/Rhino+Migration+Guide) specific extension which are already supported by nashorn.
+Ex:
+
+var String = Java.type("java.lang.String"); // Nashorn way!
+var Array = java.lang.reflect.Array // Rhino way!
+
+// collections are interpreted as arrays.
+var arr = [ "hello", "world" ];
+var list = Java.to(array, Java.type("java.util.List"))
+
+There are few Rhino/Mozilla extensions that are supported only if you load the compatibility script provided by nashorn. The compatibility script is loaded using "load('[`nashorn:mozilla_compat.js`](http://cr.openjdk.java.net/~sundar/8010924/webrev.00/src/jdk/nashorn/internal/runtime/resources/)")
+
+-->
+<project name="MyProject" basedir="." default="main">
+
+  <property file="buildPHPFiles.properties" />
+	
+	<tstamp prefix="build">
+		<format property='timeFolder' pattern='${build.backup.folderPattern}'/>
+	</tstamp>
+	
+	<condition property="fileSep" value="\"><os family="windows"/></condition>
+	<condition property="fileSep" value="/"><os family="unix"/></condition>
+	
+	<target name="main">
+	<echo message="BackUP Folder : ${build.backup.folder}" />
+	<mkdir dir="${build.backup.folder}\${build.timeFolder}" />
+<!-- script run both on rhino and nashorn -->
+<script language="javascript"> <![CDATA[
+	// "nashorn:" pseudo URL scheme for nashorn's built-in scripts.
+	// To support Rhino load Mozilla compatibility script - which defines global functions like importPackage, importClass for rhino compatibility.
+	load("nashorn:mozilla_compat.js");
+	
+	// Accessing Java packages and classes from script. Nashorn's recommended way to access Java classes is to use Java.type.
+	importPackage(java.io) // Rhino extensions: importPackage global function
+	importClass(java.lang.System); // Rhino extensions:  global.importClass
+	
+	var File = java.io.File; // Rhino way!
+	var String = Java.type("java.lang.String"); // Nashorn way!
+	
+	// Access to Ant-Properties by their names
+	basedir  = self.getProject().getProperty("basedir");
+	fileSep  = project.getProperty("fileSep");
+	System.out.println(" [script command-line] Java API : " + fileSep);
+	
+	// create and use a Task via Ant API
+	echo = self.getProject().createTask("echo");
+	function setMessage( msg ) {
+		echo.setMessage( msg );
+		echo.perform();
+	}
+	setMessage("[echo Task] Ant API : " + basedir );
+	
+		var mkdir = self.getProject().createTask("mkdir");
+	
+		// https://ant.apache.org/manual/Tasks/move.html
+		// <move file="file.orig" todir="dir/to/move/to"/>
+		var move = self.getProject().createTask("move");
+		
+		// https://ant.apache.org/manual/Tasks/copy.html
+		//<copy file="myfile.txt" tofile="mycopy.txt" overwrite="true" encoding="ISO-8859-1"/>
+		// <copy file="myfile.txt" todir="../some/other/dir"/>
+		// <copy todir="${backup}" > <fileset dir="${loop.param}" includes="**"/> </copy>
+		var copy = self.getProject().createTask("copy");
+		
+		// https://ant.apache.org/manual/Tasks/delete.html
+		// <delete dir="test" /> <delete file="test.properties" />
+		//var delete = self.getProject().createTask("delete");
+		//delete.setQuiet(true);
+		
+		// <fileset dir="" includes=""/> « https://ant.apache.org/manual/Types/fileset.html
+		var fileset = project.createDataType("fileset");
+		
+		ticket  = project.getProperty("build.commited.ticket");
+		setMessage("ticket: " + ticket);
+		ticket_includes = project.getProperty("build.commited.ticket.includes");
+		setMessage("ticket_includes : " + ticket_includes);
+		fileset.setDir( new File( ticket ) );
+		fileset.setIncludes( ticket_includes );
+	
+		
+	ds = fileset.getDirectoryScanner( self.getProject() ); // Get the files (array) of that fileset
+	fileset_files = ds.getIncludedFiles(); // Get only the files
+	
+	builded_Files  = project.getProperty("builded.Files");
+	
+	build_backupFolder  = project.getProperty("build.backup.folder");
+	build_backup_timeFolder  = project.getProperty("build.timeFolder");
+	build_MainFolder  = project.getProperty("build.main.folder");
+	build_backup = build_backupFolder+"\\"+build_backup_timeFolder+"\\"+build_MainFolder;
+	setMessage("Backup Folder : " + build_backup);
+	
+	
+	// iterate over that array
+	for (i=0; i < fileset_files.length; i++) {
+	
+		var basedir  = fileset.getDir( self.getProject() );
+		var ticket_filePath = fileset_files[i];
+		var ticket_folders = ticket_filePath.split(fileSep).slice(0,-1).join(fileSep);
+		var ticket_fileName = ticket_filePath.split(fileSep).slice(-1)[0];
+		var ticket_file = new File(basedir, ticket_filePath);
+		var ticket_fileSize = ticket_file.length();
+	
+		setMessage(ticket_folders + "« FileName : "+ ticket_fileName +" : " + ticket_fileSize + " byte");
+		
+		build_ticket_filePath = ticket+"\\"+ticket_folders+"\\"+ticket_fileName;
+		
+		backup_folderPath = build_backup+"\\"+ticket_folders;
+		backup_filePath = backup_folderPath+"\\"+ticket_fileName;
+		
+		builded_folderPath = builded_Files+"\\"+ticket_folders;
+		builded_filePath = builded_folderPath+"\\"+ticket_fileName;
+		
+		makeDir( backup_folderPath );
+		
+		moveFileToDir( builded_filePath, backup_folderPath );
+		copyFileToDir( build_ticket_filePath, builded_folderPath );
+	}
+	
+	function makeDir( directory ) {
+		mkdir.setDir( new File( String.valueOf( directory ) ) );
+		mkdir.perform();
+	}
+	function copyFileToDir ( filePath_fileName, directory) {
+		try {
+			copy.setFile( new File( String.valueOf( filePath_fileName ) ) );
+			copy.setTodir( new File( String.valueOf( directory ) ) );
+			copy.perform();
+		
+		} catch (e) {
+			setMessage("===== Unable to find file to copy.");
+		}
+	}
+	function moveFileToDir ( filePath_fileName, directory) {
+		try {
+			move.setFile( new File( String.valueOf( filePath_fileName ) ) );
+			move.setTodir( new File( String.valueOf( directory ) ) );
+			move.perform();
+		} catch (e) {
+			setMessage("===== Unable to find file to move.");
+		}
+	}
+	
+]]></script>
+	</target>
+</project>

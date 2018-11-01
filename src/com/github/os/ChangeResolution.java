@@ -7,7 +7,7 @@ import java.io.File;
 
 import javax.swing.JFrame;
 
-import com.github.xuggle.RecordVideoThread;
+import com.github.xuggle.RecordVideo;
 
 
 public class ChangeResolution {
@@ -99,7 +99,8 @@ public class ChangeResolution {
 		
 		if ( screenSize.width == width && screenSize.height == height ) {
 			
-			RecordVideoThread recordVideoThread = new RecordVideoThread( obj.inputFile.getAbsolutePath() );
+			RecordVideo recordVideoThread = new RecordVideo();
+			recordVideoThread.setVideoFile( obj.inputFile.getAbsolutePath() );
 			Thread video = new Thread( recordVideoThread );
 			video.start();
 			
@@ -109,10 +110,10 @@ public class ChangeResolution {
 				System.out.println("i : "+i);
 			}
 			
-			new RecordVideoThread().sleepThread( 1000 * 15  * 1 );
+			new RecordVideo().sleepThread( 1000 * 15  * 1 );
 			
-			RecordVideoThread.record = false;
-			System.out.println("record : "+RecordVideoThread.record);
+			RecordVideo.recordVideo = false;
+			System.out.println("record : "+ RecordVideo.recordVideo);
 			
 			try {
 				video.join();

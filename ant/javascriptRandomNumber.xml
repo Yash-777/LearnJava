@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Js_Code" default="getRandom" basedir=".">
+	<description>
+		Executing Javascript Code « Use a script task to generate a random number, then print it
+	</description>
+
+	<target name="random">
+		<!-- https://ant.apache.org/manual/Tasks/script.html -->
+		<script language="javascript"> <![CDATA[
+			
+			// import statements
+			// importPackage(java.io);
+			importClass(java.io.File);
+			
+			// iterate over that array
+			for (i=1; i<=5; i++) {
+				// echo = BuildFile_ProjectName.createTask("echo");
+				// create and use a Task via Ant API, BuildFile_ProjectName should follow java method naming conventions.
+				echo = Js_Code.createTask("echo");
+				echo.setMessage("Number : " + i*i);
+				echo.perform();
+			
+				// self.log("Number " + i*i, project.MSG_DEBUG);
+			}
+
+			//NB: an unqualified Math is the JavaScript object
+			var r = java.lang.Math.random();
+			var num = Math.round( r * 1000 );
+			project.setNewProperty("random", num);
+			
+			self.log("Generated random number " + num, project.MSG_DEBUG);
+		]]> </script>
+	</target>
+	<target name="getRandom" depends="random">
+		<echo>Random number is ${random}</echo>
+	</target>
+</project>

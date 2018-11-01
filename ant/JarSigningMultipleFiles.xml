@@ -19,7 +19,65 @@ xmlns="antlib:org.apache.tools.ant" xmlns:if="ant:if" xmlns:unless="ant:unless">
 	<property name="webapp.name"     value="ROOT"/>
 
 	<tstamp><format property='build.time' pattern='yyyy-MM-dd HH:mm:ss'/></tstamp>
+	
+	<!-- ===== BUILD: Create Directories ===== -->
+	<target name="build-prepare">
+		<mkdir dir="${webapps.build}"/>
+		<mkdir dir="${webapps.build}/${webapp.name}"/>
+	</target>
 
+	<!-- ===== Create Directories & Copy Static Files ===== -->
+	<target name="build-static" depends="build-prepare">
+		<copy todir="${webapps.build}/${webapp.name}">
+			<fileset dir=".">
+				<exclude name="*.xml"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ===== Signed JAR remove old keystores. ===== -->
+	<target name="signjars" depends="removeKeysotres">
+		<echo>Creating Direcotry Name ${build.output.dir}</echo>
+		<mkdir dir="${build.output.dir}"/>
+		
+		<signjar destDir="${build.output.dir}" 
+			alias="${key.store.aliasName}"
+			keystore="${key.store.fileLocation}"
+			storepass="${key.store.password}"
+			lazy="true">
+				<path>
+					<fileset dir="${build.src.dir}" includes="**/*.jar" />
+				</path>
+		</signjar>
+	</target>
+	
+	<target name="removeKeysotres">
+		<echo>Removing old KeyStores from JAR's</echo>
+	
+		<fileset id="artifacts.fs" dir=".">
+			<include name="*.jar" />
+		</fileset>
+	
+		<pathconvert refid="artifacts.fs" property="artifacts.str" />
+	
+		<echo message="$${artifacts.str}: ${artifacts.str}" />
+		<!-- macrodef : unless is required for empty lists to not call the enclosed tasks -->
+		<iterate list="${artifacts.str}" unless:blank="${artifacts.str}">
+			<echo message="I see: ${element}" />
+			
+			<!-- http://stackoverflow.com/a/2521269/5081877 -->
+			<jar destfile="${temp-element}">  <!-- New copy to store jar file data -->
+				<zipfileset src="${element}" excludes="**/META-INF/Yash777.*"/>
+			</jar>
+			
+			<move file="${temp-element}" tofile="${element}" /> <!-- Move New file data to actual file -->
+			<delete file="${temp-element}" /><!-- Delete New copy of jar file -->
+		</iterate>
+		<!-- local variable is now empty -->
+		<echo message="${element}" />
+	</target>
+	
+	<!-- https://ant.apache.org/manual/Tasks/macrodef.html -->
 	<!-- http://stackoverflow.com/a/23908496/5081877 -->
 	<macrodef name="iterate">
 		<attribute name="list" />
@@ -55,62 +113,6 @@ xmlns="antlib:org.apache.tools.ant" xmlns:if="ant:if" xmlns:unless="ant:unless">
 			</iterate>
 		</sequential>
 	</macrodef>
-
-	<!-- ===== BUILD: Create Directories ===== -->
-	<target name="build-prepare">
-		<mkdir dir="${webapps.build}"/>
-		<mkdir dir="${webapps.build}/${webapp.name}"/>
-	</target>
-
-	<!-- ===== Create Directories & Copy Static Files ===== -->
-	<target name="build-static" depends="build-prepare">
-		<copy todir="${webapps.build}/${webapp.name}">
-			<fileset dir=".">
-				<exclude name="*.xml"/>
-			</fileset>
-		</copy>
-	</target>
-
-	<target name="removeKeysotres">
-		<echo>Removing old KeyStores from JAR's</echo>
-	
-		<fileset id="artifacts.fs" dir=".">
-			<include name="*.jar" />
-		</fileset>
-	
-		<pathconvert refid="artifacts.fs" property="artifacts.str" />
-	
-		<echo message="$${artifacts.str}: ${artifacts.str}" />
-		<!-- unless is required for empty lists to not call the enclosed tasks -->
-		<iterate list="${artifacts.str}" unless:blank="${artifacts.str}">
-			<echo message="I see: ${element}" />
-			
-			<!-- http://stackoverflow.com/a/2521269/5081877 -->
-			<jar destfile="${temp-element}">  <!-- New copy to store jar file data -->
-				<zipfileset src="${element}" excludes="**/META-INF/Yash777.*"/>
-			</jar>
-			
-			<move file="${temp-element}" tofile="${element}" /> <!-- Move New file data to actual file -->
-			<delete file="${temp-element}" /><!-- Delete New copy of jar file -->
-		</iterate>
-		<!-- local variable is now empty -->
-		<echo message="${element}" />
-	</target>
-	
-	<target name="signjars" depends="removeKeysotres">
-		<echo>Creating Direcotry Name ${build.output.dir}</echo>
-		<mkdir dir="${build.output.dir}"/>
-		
-		<signjar destDir="${build.output.dir}" 
-			alias="${key.store.aliasName}"
-			keystore="${key.store.fileLocation}"
-			storepass="${key.store.password}"
-			lazy="true">
-				<path>
-					<fileset dir="${build.src.dir}" includes="**/*.jar" />
-				</path>
-		</signjar>
-	</target>
 	
 	<target name="remaveFileValues">
 		<!-- Example Links:
@@ -123,5 +125,4 @@ xmlns="antlib:org.apache.tools.ant" xmlns:if="ant:if" xmlns:unless="ant:unless">
 			<replacevalue>Yash</replacevalue>
 		</replace>
 	</target>
-
 </project>

@@ -7,17 +7,28 @@
  * 
  * https://github.com/Yash-777/SeleniumDriverAutomation/wiki/JavaScript-Arrays
  * 
+ * Remove value from an Array « https://stackoverflow.com/a/20690490/5081877
  * Empty current memory location of an array
  * Arrays sort()
  * Merge two sorted arrays into single array
  * Common Elements from Both Arrays
  * Array of Objects Sort based on Keys
  * Array.from(Array(100), x => Array(100).fill(false)); = https://stackoverflow.com/a/44963001/5081877
+ * 
+ * Array contains value « https://stackoverflow.com/a/1181586/5081877
  */
 
 var arr = [];  // a new empty array is addressed to arr.
 //var mainArr = new Array();
 
+// Remove value from an Array
+var value = 'Yash';
+var arr = ['Mobile', 'Yash', 'Office', 'Home'];
+console.log('Initial : ', arr );
+arr = arr.filter(item => item !== value)
+console.log('After removing : ', arr );
+// Initial :  (4) ["Mobile", "Yash", "Office", "Home"]
+// After removing :  (3) ["Mobile", "Office", "Home"]
 
 for (var i = 0; i < 5; i++) { 
 	arr.push(Math.random()); 
@@ -188,3 +199,39 @@ if (!Array.prototype.clear) { // Modifying native object functions.
 	console.log('commonValues_ArrayOfMaps', JSON.stringify(commonValues_ArrayOfMaps));
 	
 	// commonValues_ArrayOfMaps [{"key":1,"value":10},{"key":2,"value":20}]
+	
+// ===== ----- Array contains value ----- =====
+var contains = function(needle) {
+	// Per spec, the way to identify NaN is that it is not equal to itself
+	var findNaN = needle !== needle;
+	var indexOf;
+	
+	if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+		indexOf = Array.prototype.indexOf;
+	} else {
+		indexOf = function(needle) {
+			var i = -1, index = -1;
+			
+			for(i = 0; i < this.length; i++) {
+				var item = this[i];
+				
+				if((findNaN && item !== item) || item === needle) {
+					index = i;
+					break;
+				}
+			}
+		return index;
+		};
+	}
+	return indexOf.call(this, needle) > -1;
+};
+
+var arrayValues = ['Click', 'writeText', 'hover'];
+console.log( contains.call(arrayValues, 'writeText') );
+
+// ECMAScript6 - Set
+var myArray = ['A', 'ZB', 'BB'];
+var mySet = new Set(myArray);
+var hasB = mySet.has('B'); // true
+var hasZ = mySet.has('Z'); // false
+console.log( hasB, ':', hasZ);

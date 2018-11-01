@@ -5,9 +5,71 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JList;
+
 public class Test {
+	
+	public static void main (String[] args) throws java.lang.Exception {
+		String [] countries = {"Egypt", "France", "Japan", "Switzerland"};
+		Integer[] populations = {92592000, 66991000, 126860000, 8401120};
+		printTable(countries, populations);
+	}
+
+	public static void printTable(String[] countries, Integer[] populations){
+		int longestInput = 0;
+		for(int i = 0; i < countries.length; i++){
+			int countLength = countries[i].length();
+			int popLength = String.valueOf(populations[i]).length();
+			if(countLength + popLength > longestInput)
+				longestInput = countLength + popLength;
+		}
+		
+		String longestString = getLongestString( countries );
+		System.out.format("longest string: '%s'\n", longestString);
+		
+		Integer longestNumber = getLongestNumber( populations );
+		System.out.format("longest Number: '%s'\n", longestNumber);
+		
+		for(int i = 0; i < countries.length; i++)
+			System.out.format("%-" + longestString.length() + "s | %" + String.valueOf(longestNumber).length() + "d\n", countries[i], populations[i]);
+		
+		
+		String[] data = {"one", "two", "three", "four"};
+		JList<?> dataList = new JList<String>(data);
+		System.out.println("javax.swing.JList : "+ dataList.toString() );
+		
+		// The value of the JList model property is an object that provides
+		// a read-only view of the data.  It was constructed automatically.
+		for(int i = 0; i < dataList.getModel().getSize(); i++) {
+			System.out.println(dataList.getModel().getElementAt(i).toString().length());
+		}
+		
+	}
+	public static String getLongestString(String[] array) {
+		int maxLength = 0;
+		String longestString = null;
+		for (String s : array) {
+			if (s.length() > maxLength) {
+				maxLength = s.length();
+				longestString = s;
+			}
+		}
+		return longestString;
+	}
+	public static Integer getLongestNumber(Integer[] array) {
+		int maxLength = 0;
+		Integer longestNumber = null;
+		for (Integer i : array) {
+			if (String.valueOf(i).length() > maxLength) {
+				maxLength = String.valueOf(i).length();
+				longestNumber = i;
+			}
+		}
+		return longestNumber;
+	}
+	
 	@SuppressWarnings("unchecked")
-	public static void main(String[] args) {
+	public static void arraySortWhileInsert() {
 		
 		Object[] array = new String[3];
 		array[0] = "a";

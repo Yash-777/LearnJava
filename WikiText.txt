@@ -1,0 +1,24 @@
+What is the release version for "SeleniumWebDrivers"? (io.github.Yash-777:SeleniumWebDrivers) 0.0.1: : 
+What is SCM release tag or label for "SeleniumWebDrivers"? (io.github.Yash-777:SeleniumWebDrivers) SeleniumWebDrivers-0.0.1:
+
+
+https://stackoverflow.com/a/14945782/5081877
+[![Watch the video]( Youtube_Video.png )]( Video - URL )
+
+https://app.skyvia.com/#/packages
+
+AWS: https://docs.mongodb.com/stitch/rules/mongodb-validation/
+
+Received error response:The AWS Access Key Id you provided does not exist in our records.
+ (Service: Amazon S3; Status Code: 403; Error Code: InvalidAccessKeyId; Request ID: 7F53DEA11741A44F)
+
+Java Questions:
+	
+	« Difference between JDK and JRE.
+	
+	« Purpose of this, super keywords. [Current instance, Super instance]
+	« equals() and ==. [ Data, Hash codes equality check]
+	« String, String Builder and String Buffer.
+		[ String-equals,concat,intern <&> Builder, Buffer(Syn) append, reverse, replace ]
+	
+https://github.uconn.edu/CSE2102Fall2012Storrs/Project28JMeter

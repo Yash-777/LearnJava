@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Ant-Contrib library
+
+This library is for contributed Ant tasks that have
+not been approved for inclusion into the ant core or
+optional library.
+
+The easiest way to use the tasks is to use
+
+<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+  <classpath>
+    <pathelement location="your/path/to/ant-contrib.jar" />
+  </classpath>
+</taskdef>
+
+in your build file.  If ant-contrib.jar is on your CLASSPATH or in
+ANT_HOME/lib you can even simplify this to read
+
+<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+
+
+Requirements:
+Runtime:
+	Requires APACHE Ant Version 1.5 or above.  Note, that output
+	handlers on the ForEach task will not properly report the
+	task which is outputting the message unless you are using
+	Ant version 1.5.2 or greater.
+
+Compilation:
+	Ant Version 1.5.2.
+	-->
+<project name="CleanData" default="cleantemp" basedir=".">
+	<!-- https://stackoverflow.com/questions/18926846/how-to-get-the-user-temp-directory-in-ant -->
+	<!-- C:\Users\yashwanth.m\AppData\Local\Temp -->
+	<property environment="env"/>
+	<!-- taskdef # Only one of the attributes name, file and resource can be set
+	http://nant.sourceforge.net/release/0.85/help/tasks/foreach.html
+	
+	Action: Check that any custom tasks/types have been declared.
+	Action: Check that any <presetdef>/<macrodef> declarations have taken place.
+	 -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="${env.ANT_HOME}/lib/ant-contrib-0.6.jar"/>
+		</classpath>
+	</taskdef>
+	<target name="showtemp">
+		<echo message="java.io.tmpdir = ${java.io.tmpdir}"/>
+		<echo message="windows tmpdir = ${env.TMP}"/>
+		<echo message="windows JAVA_HOME = ${env.JAVA_HOME}"/>
+		<echo message="windows ANT_HOME = ${env.ANT_HOME}"/>
+	</target>
+	
+	<target name="jarVersion">
+		<!-- selenium-server-standalone-2.45.0.jar -->
+		<pathconvert pathsep="&#10;" property="currJarVersion">
+			<fileset dir="${env.TMP}">
+				<include name="**/*.*" />
+			</fileset>
+			<regexpmapper from="^.*([0-9]+\.[0-9]+).*$$" to="\1" /><!-- $ doubled for Ant -->
+		</pathconvert>
+		<echo message="C: ${currJarVersion}"/>
+
+		<fileset dir="${env.TMP}" id="fileset.files">
+			<include name="**/*.*"/>
+		</fileset>
+		<pathconvert pathsep="," property="javafiles" refid="fileset.files">
+			<regexpmapper from="^.*([0-9]+\.[0-9]+).*$$" to="\1" />
+		</pathconvert>
+		<echo message="C: ${javafiles}"/>
+	</target>
+	
+	<target name="cleanBaseDirtemp" description="Clean Base Dir temporary files">
+		<delete includeemptydirs="true">
+			<!-- E:\Yashwanth\temp -->
+			<fileset dir="E:/temp">
+				<!--
+				<include name="**/*.txt"/>
+				<include name="**/*.log"/>
+				-->
+				<exclude name="**/*.txt" />
+			</fileset>
+		</delete>
+	</target>
+
+	<!-- https://ant.apache.org/manual/Tasks/delete.html -->
+	<target name="cleantempSampleTest" description="Clean temporary files" depends="showtemp">
+		<!-- http://ant-contrib.sourceforge.net/tasks/index.html -->
+		<!-- ant-contrib-0.6.jar - https://sourceforge.net/projects/ant-contrib/files/ant-contrib/
+		Find main jar file inside ant-contrib-0.6-bin.zip/lib folder.
+		-->
+		<trycatch>
+		<try>
+		<!-- failonerror="false" - https://svn.apache.org/repos/asf/ant/core/branches/ANT_17_BRANCH/docs/manual/CoreTasks/delete.html -->
+			<delete includeemptydirs="true" failonerror="false" verbose="true">
+				<fileset dir="${env.TMP}" includes="**/*" defaultexcludes="false"/>
+			</delete>
+		</try>
+		<catch>
+			<echo>In &lt;catch&gt;.</echo>
+		</catch>
+		<finally>
+			<echo>In &lt;finally&gt;.</echo>
+		</finally>
+		</trycatch>
+		
+	</target>
+	
+	<!-- https://ant.apache.org/manual/Tasks/delete.html -->
+	<target name="cleantemp" description="Clean temporary files" depends="showtemp"> 
+		<!-- http://ant-contrib.sourceforge.net/ -->
+		<!-- http://ant-contrib.sourceforge.net/tasks/tasks/trycatch.html -->
+		<!-- ant-contrib-0.3-bin.zip (ant-contrib-0.3.jar) https://sourceforge.net/projects/ant-contrib/files/ant-contrib/
+		http://nant.sourceforge.net/release/0.85/help/tasks/foreach.html -->
+		<foreach target="loop" param="loop.param">
+			<!-- <fileset dir="${java.io.tmpdir}" includes="*" defaultexcludes="false" />
+			http://ant.apache.org/manual/Types/fileset.html	-->
+			<fileset dir="${java.io.tmpdir}" casesensitive="yes">
+				<include name="**/*.*"/>
+				<exclude name="**/npm-6736-57158368/*"/>
+			</fileset>
+			
+		</foreach>
+			
+		<!-- <multirootfileset basedirs="${java.io.tmpdir}">
+			 <include name="**/*.tmp"/>
+			 <include name="**/*.*"/>
+			 <exclude name="**/npm-6736-57158368/*"/>
+		</multirootfileset> -->
+		<foreach target="loopdir" param="loopdir.param">
+			<fileset dir="${java.io.tmpdir}">
+				<exclude name="**/*.*"/>
+			</fileset>
+		</foreach>
+	</target>
+	
+	
+	<target name="loop">
+		<trycatch>
+			<try>
+				<!-- <delete includeemptydirs="true"  verbose="true">
+					<fileset dir="${env.TMP}" includes="**/*" defaultexcludes="false"/>
+				</delete> -->
+				<echo message="${loop.param}"/>
+				<delete file="${loop.param}"/>
+				<!-- failonerror="true" -->
+			</try>
+			<catch>
+				<echo>In &lt;catch&gt;.</echo>
+			</catch>
+			<finally>
+				<echo>In &lt;finally&gt;.</echo>
+			</finally>
+		</trycatch>
+	</target>
+	<target name="loopdir">
+		<trycatch>
+			<try>
+				<echo message="${loopdir.param}"/>
+				<delete includeemptydirs="true" verbose="true">
+					<fileset dir="${loop.param}" includes="**/*" defaultexcludes="false"/>
+				</delete>
+				<!-- failonerror="true" -->
+			</try>
+			<catch>
+				<echo>In &lt;catch&gt;.</echo>
+			</catch>
+			<finally>
+				<echo>In &lt;finally&gt;.</echo>
+			</finally>
+		</trycatch>
+	</target>
+
+</project>

@@ -1,0 +1,58 @@
+<project name="Properties file changes" default="propertiesToken" basedir=".">
+  <!-- https://stackoverflow.com/a/20643091/5081877 -->
+  <record name="build.log" loglevel="verbose" action="start"/>
+
+  <property file="build.properties" />
+  <property file="configTokenValues.properties" />
+
+  <!-- ant-contrib-cleanTemp.xml
+  propertyfiles=org.apache.tools.ant.taskdefs.optional.PropertyFiles
+  -->
+  <!-- <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <pathelement location="${env.ANT_HOME}/lib/ant-contrib-0.6.jar"/>
+    </classpath>
+   </taskdef> -->
+
+
+  <target name="propertiesToken">
+    <propertyfile file="${developmentProps}"> 
+      <entry key="config.db.driverClassName" value = "${@driverClassName}" type="string"/>
+      <entry key="config.db.url"             value = "${@url}"             type="string"/>
+      <entry key="config.db.username"        value = "${@username}"        type="string"/>
+      <entry key="config.db.password"        value = "${@password}"        type="string" default=""/>
+    </propertyfile>
+  </target>
+
+  <target name="propertiesTokenReplaceKeys">
+    <propertyfile file="${developmentProps}"> 
+      <entry key="config.db.driverClassName" value = "@driverClassName" />
+      <entry key="config.db.url"             value = "@url"/>
+      <entry key="config.db.username"        value = "@username"/>
+      <entry key="config.db.password"        value = "@password" default=""/>
+    </propertyfile>
+  </target>
+  <target name="tokenReplaceValue" depends="propertiesTokenReplaceKeys">
+    <replace file="${developmentProps}" replacefilterfile="${environmentProps}" />
+    <!-- <replace  file="${developmentProps}" token="$username" value="localhost" /> -->
+  </target>
+
+</project>
+<!-- 
+«[build.properties]
+developmentProps = config.properties
+environmentProps = configTokenValues.properties
+
+«[config.properties]
+config.db.driverClassName :com.mysql.jdbc.Driver
+config.db.url             :jdbc:mysql://127.0.0.1:3306/automationlab
+config.db.username        :root
+config.db.password        :
+
+[The string "\-\-" is not permitted within comments.]
+«[configTokenValues.properties]
+@driverClassName =com.mysql.jdbc.Driver
+@url             =jdbc:mysql://172.16.21.109:3306/automationlab
+@username        =appsadmin
+@password        =inf0tree#99
+-->

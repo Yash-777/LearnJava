@@ -1,6 +1,7 @@
 /**
  * Object, Array values for a key
  * https://stackoverflow.com/a/3357615/5081877
+ * https://www.quora.com/What-is-the-difference-between-sessionstorage-localstorage-and-Cookies
  */
 var count = 0;
 while ( count < 4 ) {
@@ -24,3 +25,4 @@ while ( count < 4 ) {
 
 	count++;
 }
+

@@ -7,3 +7,14 @@ public class UserDefinedException extends Exception {
 		super(message);
 	}
 }
+class WebDriverException extends RuntimeException {
+
+	private static final long serialVersionUID = 1448252457771538150L;
+	public WebDriverException(String message) {
+		super(message);
+	}
+	
+	public WebDriverException(Throwable cause) {
+		super(cause);
+	}
+}

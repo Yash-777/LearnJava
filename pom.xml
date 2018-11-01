@@ -11,9 +11,82 @@
 	<fasterxml.jackson>2.7.3</fasterxml.jackson>
 	<seleniumVersion>3.5.1</seleniumVersion>
 	<poi.version>3.17</poi.version>
+	<opencsv.version>4.1</opencsv.version>
+	
+	<freemarker.version>2.3.28</freemarker.version>
 </properties>
 
+<!-- https://maven.apache.org/pom.html -->
+<repositories>
+	<!-- Repository for ORACLE ojdbc6 from nexus -->
+	<!-- Telling maven to check for jars in this repository it not available in maven default -->
+	<!-- https://stackoverflow.com/a/27762455/5081877 -->
+	<repository>
+		<id>codelds</id>
+		<url>https://code.lds.org/nexus/content/groups/main-repo</url>
+		<releases>
+			<enabled>true</enabled>
+			<updatePolicy>never</updatePolicy>
+		</releases>
+		<snapshots>
+			<enabled>false</enabled>
+		</snapshots>
+	</repository>
+	<!-- https://stackoverflow.com/a/40888570/5081877 -->
+	<repository>
+		<id>xuggle repo</id>
+		<url>https://files.liferay.com/mirrors/xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
+		<releases>
+			<enabled>true</enabled>
+			<updatePolicy>never</updatePolicy>
+		</releases>
+		<snapshots>
+			<enabled>false</enabled>
+		</snapshots>
+	</repository>
+</repositories>
+
+<pluginRepositories>
+	<pluginRepository>
+		<id>codelds</id>
+		<url>https://code.lds.org/nexus/content/groups/main-repo</url>
+	</pluginRepository>
+	<pluginRepository>
+		<id>maven.oracle.com</id>
+		<name>oracle-maven-repo</name> 
+		<url>https://maven.oracle.com</url>
+		<layout>default</layout>
+		<releases>
+			<enabled>true</enabled>
+			<updatePolicy>always</updatePolicy>
+		</releases>
+	</pluginRepository>
+</pluginRepositories>
+
 <dependencies>
+<!-- Adding the dependency as system scope and refer to it by its full path. 
+${basedir} represents the directory containing pom.xml.
+<systemPath>${project.basedir}/lib/SeleniumWebDrivers.jar</systemPath>
+ -->
+	<dependency>
+	  <groupId>io.github.Yash-777</groupId>
+	  <artifactId>SeleniumWebDrivers</artifactId>
+	  <version>1.0.0</version>
+	</dependency>
+	<!-- <dependency>
+	  <groupId>org.rauschig</groupId>
+	  <artifactId>jarchivelib</artifactId>
+	  <version>0.7.1</version>
+	  <scope>compile</scope>
+	</dependency> -->
+	<!-- https://code.google.com/archive/p/xuggle/source/default/source -->
+	<!-- https://files.liferay.com/mirrors/xuggle.googlecode.com/ -->
+	<dependency>
+		<groupId>xuggle</groupId>
+		<artifactId>xuggle-xuggler</artifactId>
+		<version>5.4</version>
+	</dependency>
+	
 	<!-- Mail -->
 	<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
 	<dependency>
@@ -168,6 +241,14 @@
 		<artifactId>mysql-connector-java</artifactId>
 		<version>5.1.34</version>
 	</dependency>
+	<dependency>
+		<groupId>com.oracle</groupId>
+		<artifactId>ojdbc6</artifactId>
+		<version>11.2.0.3</version>
+		<!-- must match file name -->
+		<!-- <scope>system</scope>
+		<systemPath>${basedir}/lib/ojdbc6.jar</systemPath> -->
+	</dependency>
 	
 	<!-- JMETER - XML -->
 	<dependency>
@@ -180,6 +261,14 @@
 		<artifactId>ApacheJMeter_core</artifactId>
 		<version>2.11</version>
 	</dependency>
+	
+	<!-- ANT Custom Tasks -->
+	<dependency>
+		<groupId>ant</groupId>
+		<artifactId>ant</artifactId>
+		<version>1.6.5</version>
+	</dependency>
+	
 	
 	<!-- MICROSOFT AZURE - CLOUD STORAGE -->
 	<dependency>
@@ -248,29 +337,84 @@
 	<!-- Reading .xls and .xlsx files -->
 	<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
 	<dependency>
-	    <groupId>org.apache.poi</groupId>
-	    <artifactId>poi</artifactId>
-	    <version>${poi.version}</version>
+		<groupId>org.apache.poi</groupId>
+		<artifactId>poi</artifactId>
+		<version>${poi.version}</version>
 	</dependency>
 	<dependency>
-        <groupId>org.apache.poi</groupId>
-        <artifactId>poi-ooxml</artifactId>
-        <version>${poi.version}</version>
-    </dependency>
+		<groupId>org.apache.poi</groupId>
+		<artifactId>poi-ooxml</artifactId>
+		<version>${poi.version}</version>
+	</dependency>
 	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
 	<dependency>
-	    <groupId>org.apache.commons</groupId>
-	    <artifactId>commons-collections4</artifactId>
-	    <version>4.1</version>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-collections4</artifactId>
+		<version>4.1</version>
 	</dependency>
 	<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
 	<dependency>
-	    <groupId>commons-codec</groupId>
-	    <artifactId>commons-codec</artifactId>
-	    <version>1.11</version>
+		<groupId>commons-codec</groupId>
+		<artifactId>commons-codec</artifactId>
+		<version>1.11</version>
 	</dependency>
+	
+	<!-- XML Namespace -->
+	<dependency>
+		<groupId>org.apache.ws.commons</groupId>
+		<artifactId>ws-commons-util</artifactId>
+		<version>1.0.1</version>
+	</dependency>
+	
+	<!-- Java Network Launching Protocol - JNLP -->
+	<!-- <dependency>
+		<groupId>javax.jnlp</groupId>
+		<artifactId>jnlp</artifactId>
+		<version>1.5.0</version>
+	</dependency> -->
+	
+	<!-- Log4j -->
+	<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.17</version>
+	</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.log4mongo</groupId>
+			<artifactId>log4mongo-java</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+			<dependency>
+				<groupId>org.mongodb</groupId>
+				<artifactId>mongo-java-driver</artifactId>
+				<version>2.14.2</version>
+			</dependency>
+		
+	<!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
+	<dependency>
+		<groupId>com.opencsv</groupId>
+		<artifactId>opencsv</artifactId>
+		<version>${opencsv.version}</version>
+	</dependency>
+	
+	<!-- org.freemarker/freemarker [MAC Jar Launcher] -->
+	<dependency>
+		<groupId>org.freemarker</groupId>
+		<artifactId>freemarker</artifactId>
+		<version>${freemarker.version}</version>
+	</dependency>
+	
 </dependencies>
+
 <build>
+	<finalName>LearnJava</finalName>
 	<sourceDirectory>src</sourceDirectory>
 	<plugins>
 		<plugin>

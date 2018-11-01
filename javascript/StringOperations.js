@@ -2,7 +2,8 @@
  * Reverse a String.
  * String Replace with Multiple Characters list.
  * 
- * String contains SunString « https://stackoverflow.com/a/1789952/5081877
+ * String contains SubString « https://stackoverflow.com/a/1789952/5081877
+ * 
  * == and === « https://stackoverflow.com/a/359509/5081877
  */
 
@@ -58,3 +59,36 @@ console.log( strReplace );
 var caseSensitiveSTR = "Is this all there is?";
 caseSensitiveSTR = caseSensitiveSTR.replace(/\?/g, 'II');
 // "Is this all there isII"
+
+// ===== Split, start with, index of =====
+var objTarget = '//window[1]//iframe[4]//body//iframe[0]///select[1]';
+objTarget = objTarget.substring(11, objTarget.length);
+	if(objTarget.startsWith("]")) {
+		objTarget = objTarget.substring(1, objTarget.length);
+		console.log('window`s value is greater than 10 ',objTarget);
+	}
+console.log('Removed Window Part : ', objTarget ); // //iframe[4]//body//iframe[0]///select[1]
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
+if( objTarget.startsWith("//iframe") ) {
+	var iframeNumber = objTarget.charAt(9);
+	console.log('Find IFrame Number to post message : ', iframeNumber); // 4
+	
+	var checkInner = objTarget.substring(10, objTarget.length);
+	
+	// https://stackoverflow.com/a/1789952/5081877
+	var expr = /iframe/;  // no quotes here
+	if( expr.test( checkInner ) ) {
+		console.log('XPath contains inner Frames...');
+	}
+} else {
+	var frameNumber = objTarget.charAt(8);
+	console.log('Find Frame Number to post message : ', frameNumber);
+}
+
+var str = '//body//iframe[0]//td[3]/div[1]/button[1]/table[1]/tbody[1]/tr[1]/td[2]';
+var index = str.indexOf('//iframe');
+console.log( index );
+
+var innerFramePath = str.substring(index, str.length);
+console.log( innerFramePath );

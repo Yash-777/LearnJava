@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp">
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+      <PatternLayout pattern="%m%n"/>
+    </Console>
+    <Rewrite name="rewrite">
+      <AppenderRef ref="STDOUT"/>
+      <LoggerNameLevelRewritePolicy logger="com.github.files">
+        <KeyValuePair key="INFO" value="DEBUG"/>
+        <KeyValuePair key="WARN" value="INFO"/>
+      </LoggerNameLevelRewritePolicy>
+    </Rewrite>
+  </Appenders>
+  <Loggers>
+    <Root level="error">
+      <AppenderRef ref="Rewrite"/>
+    </Root>
+  </Loggers>
+</Configuration>

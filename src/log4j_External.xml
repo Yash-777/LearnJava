@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- https://stackoverflow.com/a/10852980/5081877 -->
+<!DOCTYPE log4j:configuration PUBLIC
+  "-//APACHE//DTD LOG4J 1.2//EN" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+<log4j:configuration debug="false">
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="target" value="System.out" />
+		<param name="threshold" value="debug" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p - %d{yyyy-MM-dd HH:mm:ss.SSS} %C{1}:%12.20M:%L - %m %n" />
+		</layout>
+	</appender>
+	
+	<appender name="FILE" class="org.apache.log4j.FileAppender">
+		<param name="file" value="E:/Logs/logFile.log" />
+		<param name="append" value="false" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p - %d{yyyy-MM-dd HH:mm:ss.SSS} %C{1}:%12.20M:%L - %m %n" />
+		</layout>
+	</appender>
+	
+	<appender name="FILE_PER_SIZE" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="E:/Logs/logRollingFile.log" />
+		<param name="immediateFlush" value="true"/>
+		<param name="maxFileSize" value="100KB" />
+		<param name="maxBackupIndex" value="2"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p - %d{yyyy-MM-dd HH:mm:ss.SSS} %C{1}:%12.20M:%L - %m %n" />
+		</layout>
+	</appender>
+	
+	<appender name="FILE_PER_DAY" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="E:/Logs/logRollingDayFile.log" />
+		<param name="datePattern" value="'_'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p - %d{yyyy-MM-dd HH:mm:ss.SSS} %C{1}:%12.20M:%L - %m %n"/>
+		</layout>
+	</appender>
+	
+	<root>
+		<priority value="info" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+		<appender-ref ref="FILE_PER_SIZE" />
+		<appender-ref ref="FILE_PER_DAY" />
+	</root>
+</log4j:configuration>

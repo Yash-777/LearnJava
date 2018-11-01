@@ -17,12 +17,14 @@ public class CPU_Cores_JVM {
 		int cores = Runtime.getRuntime().availableProcessors();
 		System.out.println("Allocation CPU Core in Current Machine « "+cores);
 		
-		//System.out.println("CPU Cores : "+ getNumberOfCPUCores() );
+		System.out.println("CPU Cores : "+ getNumberOfCPUCores() );
 		
-		System.out.println("Windows with Cygwin installed : "+ System.getenv("NUMBER_OF_PROCESSORS"));
+		//System.out.println("Windows with Cygwin installed : "+ System.getenv("NUMBER_OF_PROCESSORS"));
 	}
 	public static int getNumberOfCPUCores() {
-		String command = "cmd /C WMIC CPU Get /Format:List";
+		String command = 
+				//"cmd.exe /c start WMIC CPU Get /Format:List";
+				"cmd /C WMIC CPU Get /Format:List";
 		Process process = null;
 		int numberOfCores = 0;
 		try {
@@ -35,6 +37,7 @@ public class CPU_Cores_JVM {
 				if (line.contains("NumberOfCores")) {
 					numberOfCores = Integer.parseInt(line.split("=")[1]);
 				}
+				System.out.println( line );
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

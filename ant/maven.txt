@@ -1,0 +1,14 @@
+Maven users are going to call maven a "build tool": a tool used to build deployable artifacts from source code.
+Build engineers and project managers might refer to Maven as something more comprehensive: a project management tool
+
+https://help.github.com/articles/what-is-github-pages/
+
+https://oss.sonatype.org/content/repositories/snapshots/io/github/
+
+Setting.xml
+	http://maven.apache.org/guides/mini/guide-encryption.html
+	https://github.com/sonatype/nexus-book-examples/blob/master/maven/settings/settings.xml
+	
+
+	nexus GPG plug in
+	http://maven.apache.org/plugins/maven-gpg-plugin/usage.html
