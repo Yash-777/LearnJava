@@ -1,15 +1,10 @@
 package com.github.os;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.apache.commons.io.FileUtils;
 
 import com.github.jars.ZIPExtracter;
 
@@ -162,12 +157,12 @@ public class Platform {
 		String[] javaVersionElements = System.getProperty("java.runtime.version").split("\\.|_|-b");
 		
 		Map<String, String> elements = new HashMap<String, String>();
-		elements.put(discard, discard = javaVersionElements[0]);
-		elements.put(major,   major   = javaVersionElements[1]);
-		elements.put(minor,   minor   = javaVersionElements[2]);
-		elements.put(update,  update  = javaVersionElements[3]);
-		elements.put(build,   build   = javaVersionElements[4]);
-		elements.put(vmVersion, vmVersion = System.getProperty("java.vm.version"));
+		elements.put("discard", (discard = javaVersionElements[0]));
+		elements.put("major",   (major   = javaVersionElements[1]));
+		elements.put("minor",   (minor   = javaVersionElements[2]));
+		elements.put("update",  (update  = javaVersionElements[3]));
+		elements.put("build",   (build   = javaVersionElements[4]));
+		elements.put("vmVersion", (vmVersion = System.getProperty("java.vm.version")));
 		
 		return elements;
 	}
@@ -182,37 +177,7 @@ public class Platform {
 		userDir  = System.getProperty("user.dir");
 		return userHome;
 	}
-	/**
-	 * Checks the directory already exists or not. if the directory does not exist, create it.
-	 * 
-	 * <P> http://stackoverflow.com/questions/3634853/how-to-create-a-directory-in-java
-	 * @param directoryName the name of the folder, you want to create.
-	 */
-	public void createFolder( String directoryName ) {
-		int javaVersion = getJavaVersion();
-		String path = getUsersHomeDir() + File.separator + directoryName;
-		if ( javaVersion <= 6 ) {
-			File theDir = new File( path );
-			try {
-				if ( !theDir.exists() ) {
-					System.out.println("creating directory: " + directoryName);
-					theDir.mkdir();
-				}
-			} catch(SecurityException se) {
-				try {
-					FileUtils.forceMkdir( theDir );
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		} else {
-			try {
-				Files.createDirectories(Paths.get( path ));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	
 	
 	public String getSeleniumOSDriver() {
 		if ( OS.indexOf("WIN") >= 0 ) {

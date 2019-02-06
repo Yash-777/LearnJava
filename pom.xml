@@ -14,6 +14,8 @@
 	<opencsv.version>4.1</opencsv.version>
 	
 	<freemarker.version>2.3.28</freemarker.version>
+	
+	<mysql.connector.java>5.1.34</mysql.connector.java>
 </properties>
 
 <!-- https://maven.apache.org/pom.html -->
@@ -94,7 +96,13 @@ ${basedir} represents the directory containing pom.xml.
 		<artifactId>mail</artifactId>
 		<version>1.4.7</version>
 	</dependency>
-	
+	<!-- MAIL: https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
+	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-email</artifactId>
+		<version>1.3.1</version>
+	</dependency>
+
 	<!-- Changed to « http://www.dcm4che.org/maven2/xuggle/xuggle-xuggler/5.4/ -->
 	<!-- <dependency>
 		<groupId>xuggle</groupId>
@@ -239,7 +247,7 @@ ${basedir} represents the directory containing pom.xml.
 	<dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql-connector-java</artifactId>
-		<version>5.1.34</version>
+		<version>${mysql.connector.java}</version>
 	</dependency>
 	<dependency>
 		<groupId>com.oracle</groupId>
@@ -411,6 +419,20 @@ ${basedir} represents the directory containing pom.xml.
 		<version>${freemarker.version}</version>
 	</dependency>
 	
+	
+	<!-- PDF -->
+<dependency>
+    <groupId>org.apache.pdfbox</groupId>
+    <artifactId>pdfbox</artifactId>
+    <version>2.0.9</version>
+</dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/fontbox -->
+	<dependency>
+	    <groupId>org.apache.pdfbox</groupId>
+	    <artifactId>fontbox</artifactId>
+	    <version>2.0.9</version>
+	</dependency>
+
 </dependencies>
 
 <build>

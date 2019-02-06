@@ -58,7 +58,7 @@ public class LinkedList<E>
 		linkedList.add("Last NEW ELEMENT");
 		
 		System.out.println("LinkedList contains: "+linkedList);
-		linkedList.pop(); // Removes First Entry
+		linkedList.pop(); // Returns First Entry
 		linkedList.remove(); // Removes First Entry
 		System.out.println("LinkedList contains: "+linkedList);
 		linkedList.removeLast();

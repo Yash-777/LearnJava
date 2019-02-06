@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Exoport as Runnable JAR" default="jar" basedir="."> 
+	
+	<property name="exportDestination"       value="${basedir}"/>
+
+	<property name="ProjectName"             value="${basedir}/MyRunnableJAR"/>
+	<property name="jarFileName"             value="myRunnableJAR"/>
+	<property name="RunnableMain-Class"      value="org.openqa.grid.selenium.GridLauncher"/>
+
+	<property name="class-files"             value="${ProjectName}/bin" />
+	<property name="buildPath-Libraries"     value="${ProjectName}/lib"/>
+	<property name="source-dir"              value="${ProjectName}/src" />
+	
+	<!--
+	<property name="build_dir"               value="${ProjectName}/build"/>
+	<property name="classes_dir"             value="${ProjectName}/classes"/>
+	-->
+	
+	<property name="Ant-Version"             value="Apache Ant 1.8.2"/>
+	<property name="Built-By"                value="Yashwanth.Merugu"/>
+	
+	<path id="buildLibraries">
+		<fileset dir="${buildPath-Libraries}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	<!-- compile -->
+	<target name="compile" >
+		<mkdir dir="${class-files}"/>
+		
+		<javac srcdir="${source-dir}" destdir="${class-files}" includeantruntime="false" encoding="iso-8859-1">
+			<classpath refid="buildLibraries"/>
+		</javac>
+	</target>
+	<!-- jar -->
+	<target name="jar" depends="compile">
+		<manifest file = "MANIFEST.MF"> <!-- Manifest-Version: 1.0 -->
+			<attribute name = "Built-By"    value = "${Built-By}"/>
+			<attribute name = "Ant-Version" value = "${Ant-Version}"/>
+			<attribute name = "Main-Class"  value = "${RunnableMain-Class}"/>
+			<attribute name = "Class-Path"  value = "."/>
+		</manifest>
+		
+		<jar destfile="${exportDestination}/${jarFileName}.jar" basedir="${class-files}" manifest="MANIFEST.MF">
+			<fileset dir="${class-files}" includes="**/*.class" />
+			<zipgroupfileset dir="${buildPath-Libraries}" includes="**/*.jar" />
+		</jar>
+	</target>
+	
+	
+	<!-- Build Path Entries contain in which folder ex: to="lib/*.jar" -->
+	<pathconvert property="mf.classpath" pathsep=" ">
+		<path refid="buildLibraries"/>
+		<mapper>
+			<chainedmapper>
+				<flattenmapper/>
+				<globmapper from="*.jar" to="*.jar"/>
+			</chainedmapper>
+		</mapper>
+	</pathconvert>
+</project>

@@ -1,6 +1,7 @@
 package com.github.wrappers;
 
 import com.github.core.utilcollections.ArrayFunctions;
+import com.github.java8.Java8_StreamAPI;
 
 /**
 String [Immutable - every method in the String class creates new object and return the value]
@@ -53,8 +54,10 @@ public class String_Builder_Buffer {
 		
 		
 		String reverse = "Yashwanth";
-		char[] reverseChars = ArrayFunctions.reverseString(reverse);
+		char[] reverseChars = ArrayFunctions.reverseCharacters(reverse);
 		System.out.println("Reverse String : "+ ArrayFunctions.charToString( reverseChars ) );
+		
+		Java8_StreamAPI.reverseStringArray(reverse);
 	}
 	
 	static void stringFunctions() {

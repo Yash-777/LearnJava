@@ -29,12 +29,15 @@ Runtime:
 
 Compilation:
 	Ant Version 1.5.2.
+	
+MultiRootFileSet « http://ant.apache.org/manual/Types/multirootfileset.html
+	Since Ant 1.9.4
+		Example: https://stackoverflow.com/a/25993818/5081877
 	-->
 <project name="CleanData" default="cleantemp" basedir=".">
-	<!-- https://stackoverflow.com/questions/18926846/how-to-get-the-user-temp-directory-in-ant -->
-	<!-- C:\Users\yashwanth.m\AppData\Local\Temp -->
 	<property environment="env"/>
-	<!-- taskdef # Only one of the attributes name, file and resource can be set
+	<!-- Use of external tasks « http://ant.apache.org/manual/using.html#tasks
+	taskdef # Only one of the attributes name, file and resource can be set
 	http://nant.sourceforge.net/release/0.85/help/tasks/foreach.html
 	
 	Action: Check that any custom tasks/types have been declared.

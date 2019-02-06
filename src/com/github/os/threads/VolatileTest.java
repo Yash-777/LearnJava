@@ -1,8 +1,8 @@
 package com.github.os.threads;
 
+import com.github.os.RuntimeMemories;
+
 public class VolatileTest implements Runnable {
-	
-	private static final int MegaBytes = 10241024;
 	
 	private static final Object counterLock = new Object();
 	private static int counter = 0;
@@ -55,18 +55,7 @@ public class VolatileTest implements Runnable {
 		System.out.println( Thread.currentThread().getName() +"\t\t\t\t\t « Instance :: "+ counter3);
 	}
 	public static void main(String[] args) throws InterruptedException {
-		Runtime runtime = Runtime.getRuntime();
-		
-		int availableProcessors = runtime.availableProcessors();
-		System.out.println("availableProcessors :: "+availableProcessors);
-		
-		long maxMemory = runtime.maxMemory() / MegaBytes;
-		long totalMemory = runtime.totalMemory() / MegaBytes;
-		long freeMemory = runtime.freeMemory() / MegaBytes;
-		System.out.println("MAX JVM will attempt to use : "+ maxMemory );
-		System.out.println("JVM totalMemory also equals to initial heap size of JVM : "+ totalMemory );
-		System.out.println("Returns the amount of free memory in the JVM : "+ freeMemory );
-		System.out.println(" ===== ----- ===== ");
+		RuntimeMemories.displayInfo();
 		
 		VolatileTest volatileTest = new VolatileTest();
 		Thread t1 = new Thread( volatileTest );

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="tomcat" default="local-tomcat-start" basedir=".">
+<project name="tomcat" default="local_tomcat_start_bat" basedir=".">
 
 	<tstamp prefix="build-info">
 		<format property="current-date" pattern="dd-MM-yyyy" locale="en" />
@@ -9,31 +9,17 @@
 	
 	<property file="build.properties" />
 	<property name="tomcat.home" value="${tomcat.location}" />
+	<property name="tomcatURL" value="http://localhost:8080" />
+	<property name="tomcatPORT" value="8080" />
+	<property name="local_bashPath" value="${user.home}\AppData\Local\Programs\Git\git-bash.exe"/>
+	
+	
 	<property name="backUP.folder" value="${code.backup}/${current-date}_${current-time}" />
 	<property name="build_dir" value="${tomcat.home}/webapps" />
 	<property name="war-file-name" value="${project.name}" />
 	<property name="classes_dir" value="${war-file-name}/WEB-INF/classes" />
 	
 	<property environment="env"/>
-	<target name="run">
-		<!-- https://stackoverflow.com/a/19909940/5081877 -->
-		<exec executable="cmd" failonerror="true">
-			<env key="MY_VAR" value="SOME_VAL"/>
-			<env key="CATALINA_BASE" value="${tomcat.home}" />
-			<env key="JAVA_HOME" value="${java.jdk}" />
-			<env key="JRE_HOME"  value="${java.jdk}" />
-			<arg value="/c"/>
-			<arg value="echo %MY_VAR%"/>
-			<arg value="windows JAVA_HOME = ${env.JAVA_HOME}"/>
-			<arg value="windows JRE_HOME = ${env.JRE_HOME}"/>
-		</exec>
-		
-		<echo message="java.io.tmpdir = ${java.io.tmpdir}"/>
-		<echo message="windows tmpdir = ${env.TMP}"/>
-		<echo message="windows JAVA_HOME = ${env.JAVA_HOME}"/>
-		<echo message="windows JRE_HOME = ${env.JRE_HOME}"/>
-		<echo message="windows ANT_HOME = ${env.ANT_HOME}"/>
-	</target>
 	
 	<!-- Add this jar's to class path [bootstrap.jar, common-daemon.jar, tomcat-juli.jar]
 	befor starting tomcat. -->
@@ -57,31 +43,73 @@
 	
 	<!-- http://lakjeewa.blogspot.in/2014/04/start-up-shutdown-or-restart-tomcat.html -->
 	<target name="local-tomcat-restart">
-		<antcall target="local-tomcat-stop" />
-		<antcall target="local-tomcat-start" />
-	</target>
-	<target name="local-tomcat-start" depends="local-tomcat-file-replace">
-		<java classname="org.apache.catalina.startup.Bootstrap" fork="true">
-			<classpath path="${tomcat.home}/bin/bootstrap.jar:${tomcat.home}/bin/tomcat-juli.jar" />
-			<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
-			<!--If you are getting any OutOfMemoryError, remove the comments 
-			and enable jvm argument of the following line-->
-			<!--jvmarg value="-XX:MaxPermSize=256m"/-->
-		</java>
-	</target>
-	<target name="local-tomcat-stop">
-		<java classname="org.apache.catalina.startup.Bootstrap" fork="true">
-			<classpath path="${tomcat.home}/bin/bootstrap.jar:${tomcat.home}/bin/tomcat-juli.jar" />
-			<jvmarg value="-Dcatalina.home=${tomcat.home}"/>
-			<arg line="stop"/>
-		</java>
+		<antcall target="local_tomcat_start_bat" />
+		<antcall target="local_tomcat_stop_bat" />
 	</target>
 	
+	<target name="local_tomcat_start_bat">
+		<exec executable="${tomcat.home}/bin/startup.bat">
+			<env key="CATALINA_HOME" value="${tomcat.home}"/>
+		</exec>
+		<antcall target="check_tomcat_url" />
+	</target>
+	<target name="local_tomcat_stop_bat">
+		<exec executable="${tomcat.home}/bin/shutdown.bat">
+			<env key="CATALINA_HOME" value="${tomcat.home}"/>
+		</exec>
+	</target>
+	
+	<target name="bash">
+		<exec executable="${local_bashPath}"> 
+			<arg value="bash.sh"/>
+			<arg value="/tmp"/>
+		</exec>
+	</target>
+	
+	<!-- https://ant.apache.org/manual/Tasks/waitfor.html
+	Wait up to 3 minutes (and checks every 500 milliseconds) for a web server.
+	Overloaded web container - the larger the application the longer it takes to start up. 
+	 -->
+	<target name="check_tomcat_url">
+		<waitfor maxwait="3" maxwaitunit="minute" checkevery="500">
+			<http url="${tomcatURL}"/>
+		</waitfor>
+	</target>
+	<target name="check_server_port">
+		<limit maxwait="3" maxwaitunit="minute" failonerror="true">
+			<waitfor maxwait="20" maxwaitunit="second">
+				<socket server="myserver" port="${tomcatPORT}"/>
+				<!-- <socket server="mySQL" port="27072"/> -->
+			</waitfor>
+		</limit>
+	</target>
+			
 	<!--Rename strings in properties files -->
-	<target name="local-tomcat-file-replace" depends="local-tomcat-stop">
+	<target name="local-tomcat-file-replace" >
 		<replace file="${build_dir}/${classes_dir}/config.properties">
 			<replacetoken>localhost:8080</replacetoken>
 			<replacevalue>127.0.0.1:8080</replacevalue>
 		</replace>
 	</target>
+	
+	<target name="run">
+		<!-- https://stackoverflow.com/a/19909940/5081877 -->
+		<exec executable="cmd" failonerror="true">
+			<env key="MY_VAR" value="SOME_VAL"/>
+			<env key="CATALINA_BASE" value="${tomcat.home}" />
+			<env key="JAVA_HOME" value="${java.jdk}" />
+			<env key="JRE_HOME"  value="${java.jdk}" />
+			<arg value="/c"/>
+			<arg value="echo %MY_VAR%"/>
+			<arg value="windows JAVA_HOME = ${env.JAVA_HOME}"/>
+			<arg value="windows JRE_HOME = ${env.JRE_HOME}"/>
+		</exec>
+		
+		<echo message="java.io.tmpdir = ${java.io.tmpdir}"/>
+		<echo message="windows tmpdir = ${env.TMP}"/>
+		<echo message="windows JAVA_HOME = ${env.JAVA_HOME}"/>
+		<echo message="windows JRE_HOME = ${env.JRE_HOME}"/>
+		<echo message="windows ANT_HOME = ${env.ANT_HOME}"/>
+	</target>
+
 </project>

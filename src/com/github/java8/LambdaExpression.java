@@ -1,5 +1,6 @@
 package com.github.java8;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -29,11 +30,24 @@ Examples:</a><b>
 public class LambdaExpression {
 	static List<String> listItems = Arrays.asList("Lambdas", "Default Method",
 			"Stream API", "Date and Time API", "Lambdas");
+	
+	public static void lambdaWithMultiCatch() {
+		// https://www.oracle.com/technetwork/java/javase/8-known-issues-2157115.html
+		Runnable r = () -> {
+			try {
+				throw new IOException();
+			} catch(IOException | IllegalArgumentException e) {
+				System.out.println("This code will generate a wrong exception table");
+			}
+		};
+		r.run();
+	}
 	public static void main(String[] args) {
 		/*Threads_Implementing_Runnable();
 		Iterating_Over_List();
 		stringPredictions();*/
 		//intPredictions();
+		lambdaWithMultiCatch();
 		
 		Random random = new Random();
 		random.ints().limit(5).sorted().forEach(System.out::println);

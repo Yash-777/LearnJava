@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JList;
 
-public class Test {
+public class LongestData {
 	
 	public static void main (String[] args) throws java.lang.Exception {
 		String [] countries = {"Egypt", "France", "Japan", "Switzerland"};

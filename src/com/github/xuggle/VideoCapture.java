@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import com.github.jdbc.MongoDBFiles;
+import com.github.os.threads.ThreadsUtil;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.xuggler.ICodec;
@@ -19,10 +20,10 @@ public class VideoCapture implements Runnable {
 	static boolean isSTOPRecording = false;
 	
 	public static void main(String[] args) {
-		VideoCapture recordVideoFile = new VideoCapture("clicvideocapture.mp4");
+		VideoCapture recordVideoFile = new VideoCapture("TempVidoeFile.mp4");
 		Thread thread = new Thread(recordVideoFile);
 		thread.start();
-		sleep( 1000 * 10 );
+		ThreadsUtil.sleepThread_Milli( 1000 * 10 );
 		recordVideoFile.stopRecording();
 	}
 	
@@ -73,7 +74,7 @@ public class VideoCapture implements Runnable {
 			if (isSTOPRecording) {
 				writer.flush();
 				writer.close();
-				MongoDBFiles.upload(tempDir.getAbsolutePath(), new File(outFile).getName(), driverSessionId);
+				//MongoDBFiles.upload(tempDir.getAbsolutePath(), new File(outFile).getName(), driverSessionId);
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -96,11 +97,4 @@ public class VideoCapture implements Runnable {
 		return image;
 	}
 	
-	protected static void sleep(int millis) {
-		try {
-				Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
 }

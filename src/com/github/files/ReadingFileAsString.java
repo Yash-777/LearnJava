@@ -1,6 +1,7 @@
 package com.github.files;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -25,7 +27,7 @@ import com.google.common.io.Resources;
  * @author yashwanth.m
  *
  */
-public class CloudFile_To_String {
+public class ReadingFileAsString {
 	public static void main(String[] args) throws IOException {
 		String fileName = "E:/parametarisation.csv";
 		File file = new File( fileName );
@@ -36,7 +38,6 @@ public class CloudFile_To_String {
 				// getDiskFile_Java7( file );
 				// getDiskFile_Lines( file );
 		System.out.println( " File Over Disk : \n"+ fileStream );
-		
 		
 		try {
 			String src = "https://code.jquery.com/jquery-3.2.1.js";
@@ -119,5 +120,26 @@ public class CloudFile_To_String {
 		return FileUtils.readFileToString( file, encoding );
 		/*List<String> lines = FileUtils.readLines( fileName, encoding );
 		return lines.stream().collect( Collectors.joining("\n") );*/
+	}
+	
+	public String getBase64String( String fileLocation ) {
+		try {
+			File file = new File( fileLocation );
+			DataInputStream dis = new DataInputStream(new FileInputStream(file));
+			byte[] byteArray = new byte[(int) file.length()];
+			
+			try {
+				dis.readFully(byteArray); // now the array contains the image
+			} catch (Exception e) {
+				byteArray = null;
+			} finally {
+				dis.close();
+			} // org.apache.commons.codec.binary.
+			String encodedfile = new String(Base64.encodeBase64( byteArray ), "UTF-8");
+			return encodedfile;
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

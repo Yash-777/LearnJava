@@ -40,7 +40,7 @@ public class DBCP2_ConnectionPool {
 					props.getProperty("UserName") != null	&& !"".equals(props.getProperty("UserName")) &&
 					props.getProperty("Password") != null ){
 				
-				DB_URL = props.getProperty("DBURL");
+				DB_URL = "jdbc:mysql://"+props.getProperty("DBURL");
 				DB_User = props.getProperty("UserName");
 				DB_Password = props.getProperty("Password");
 				

@@ -1,0 +1,12 @@
+<project name="tomcat" default="bash" basedir=".">
+
+	<property name="local_bashPath" value="${user.home}\AppData\Local\Programs\Git\bin\bash.exe"/>
+	<property name="bash_file" value="bash.sh"/>
+	
+	<target name="bash">
+		<exec executable="${local_bashPath}"> 
+			<arg value="${bash_file}"/>
+			<arg value="/tmp"/>
+		</exec>
+	</target>
+</project>

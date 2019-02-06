@@ -27,10 +27,7 @@ public class TimeUint_Converter {
 		
 		System.out.println("Time Zone : "+ convertSecond_to_TimeZone(sec_duration));
 		
-		String datePattern = "HH:mm:ss";
-		DateTimeFormatter RFC1123 = DateTimeFormatter.ofPattern(datePattern);
-		String timeJava8 = LocalTime.MIN.plusSeconds( sec_duration ).format(RFC1123).toString();
-		System.out.println("Java 8 : "+ timeJava8);
+		ConvertSecondToHHMMSS(sec_duration);
 		
 		System.out.println("TIme : "+ secToTime( (int)sec_duration ));
 	}
@@ -44,6 +41,15 @@ public class TimeUint_Converter {
 		String time = df.format(date);
 	
 		return time;
+	}
+	
+	// Java8 - https://stackoverflow.com/a/24385265/5081877
+	public static String ConvertSecondToHHMMSS(long sec_duration) {
+		String datePattern = "HH:mm:ss";
+		DateTimeFormatter RFC1123 = DateTimeFormatter.ofPattern(datePattern);
+		String timeJava8 = LocalTime.MIN.plusSeconds( sec_duration ).format(RFC1123).toString();
+		System.out.println("Java 8 : "+ timeJava8);
+		return timeJava8;
 	}
 	
 	/**

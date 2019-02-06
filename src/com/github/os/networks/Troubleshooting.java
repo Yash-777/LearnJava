@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.github.os.threads.ThreadsFlow;
+import com.github.os.threads.ThreadsUtil;
+
 public class Troubleshooting {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		commandPromptConsole( "ping", "stackoverflow.com" ); // cmd /C
@@ -23,27 +26,29 @@ public class Troubleshooting {
 	static void commandPromptWindow(  String command, String params ) throws IOException, InterruptedException {
 		Process process = Runtime.getRuntime().exec( "cmd.exe /c start "+ command +" "+ params );
 		
-		getUserAcceptence();
+		ThreadsUtil.getUserAcceptence("Close Command Prompt.");
 		
 		process.waitFor();
 	}
-	static void getUserAcceptence() {
-		System.out.println("Enter Some thing to quit the command prompt.");
-		try {
-			System.in.read();
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println("Thanks for your confromation>");
-	}
-	static void getProcessOutPut( Process proc ) throws IOException, InterruptedException {
+	
+	static String getProcessOutPut( Process proc ) throws IOException, InterruptedException {
 		// Read the output
 		BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 	
+		StringBuffer buffer = new StringBuffer();
 		String line = "";
+		boolean isFirstLine = true;
 		while((line = reader.readLine()) != null) {
+			
+			if( !isFirstLine ) {
+				buffer.append("\n");
+			} else {
+				isFirstLine = false;
+			}
 			System.out.print(line + "\n");
+			buffer.append(line);
+			//ThreadsFlow.sleepThread(2);
 		}
+		return buffer.toString();
 	}
 }

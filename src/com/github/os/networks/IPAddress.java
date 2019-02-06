@@ -12,18 +12,15 @@ public class IPAddress {
 		String host = "N/A";
 		String ip   = "N/A";
 
-		try{
-		host = InetAddress.getLocalHost().getHostName();
-		ip   = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException throw_away) {}
+		try {
+			host = InetAddress.getLocalHost().getHostName();
+			ip   = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException throw_away) {
+			
+		}
 
-		return String.format("System info: host: '%s', ip: '%s', os.name: '%s', os.arch: '%s',"
-				+ " os.version: '%s', java.version: '%s'",
-		host,
-		ip,
-		System.getProperty("os.name"),
-		System.getProperty("os.arch"),
-		System.getProperty("os.version"),
-		System.getProperty("java.version"));
+		return String.format("\nSystem info:\nhost: '%s',\nip: '%s',\nos.name: '%s',\nos.arch: '%s',"
+				+ "\nos.version: '%s',\njava.version: '%s'\n", host, ip, System.getProperty("os.name"),
+				System.getProperty("os.arch"), System.getProperty("os.version"), System.getProperty("java.version"));
 	}
 }

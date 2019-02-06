@@ -18,6 +18,10 @@ console.log(elem.innerHTML);
 
 count(//td[@lstype='124'])
 
+=================
+SVG XPATH - "//*[name()='svg']"    [https://stackoverflow.com/q/31520642/5081877]
+=================
+
 parent::child
 	//parentEle[.//anyChlild[@childid=123456]]/@parentid
 	(OR)
@@ -34,6 +38,7 @@ Non Duplicate Values:
 Return Attribute Value:
 	//tr[1]/td/@location = "US" « Return value of @src, @href, @text
 
+==============================================================
 starts-with & ends-with some value.
 	Css Slector « div[class='cls'][id^='myid-']
 	
@@ -42,6 +47,17 @@ starts-with & ends-with some value.
 			//tr/td[starts-with(@location,'U') and parent::tr[@lang='en']]
 			//tr/td[ends-with(@location,'S') and parent::tr[@lang='en']]
 	
+	[{( https://stackoverflow.com/a/26217115/5081877 )}]
+	« XPATH - The function ends-with() is not defined for XPath 1.0 but only for XPath 2.0 and XQuery.
+	« $str2 = substring($str1, string-length($str1)- string-length($str2) +1)
+	var innerTextVal = 'yash'; {$str2}
+	xpath « "//a[innerTextVal = substring(., string-length(.) - string-length(innerTextVal) +1)]"
+
+	var innerTextVal = e.textContent;
+	var locator = '//' + e.tagName.toLowerCase() +"['" + innerTextVal + "'"+ "= substring(., string-length(.)- string-length('" + innerTextVal + "') +1)]";
+
+	var path = '//' + e.tagName.toLowerCase() +"[normalize-space(.) = '" + str + "']";
+
 Contains Text and InnerText & starts-with some value.
 	//table/*//td[.="following-"]
 	//table/*//td[text()="following-"]
@@ -53,7 +69,8 @@ Contains Text and InnerText & starts-with some value.
 		
 		//table/*//td[contains(text(),'pre')][2] = "preceding1"
 		//table/*//td[contains(text(),'pre')][1] = "preceding1"
-	
+================================================================
+
 lastButOne Ele functions [position, last] «
 	//tr[last()]/td[position() < last()][last()] ~ //tr[last()]/td[last()]/preceding-sibling::td[1]
 	//tr[last()]/td[position() < last()-1][last()] ~ //tr[last()]/td[last()]/preceding-sibling::td[2]

@@ -19,7 +19,7 @@ import java.util.Vector;
 import org.apache.tools.ant.BuildException;
 
 /*
-he basic procedure for creating a custom task includes:
+The basic procedure for creating a custom task includes:
 
 Creating a Java class that subclasses org.apache.tools.ant.Task and overrides the execute() method.
 Packaging your class file(s) into a jar file.
@@ -32,10 +32,10 @@ public class PropertyFiles extends org.apache.tools.ant.Task /* 1 */ {
 		<taskdef name = "propertyfiles" classname = "org.apache.tools.ant.taskdefs.optional.PropertyFiles" />
 		
 		<propertyfiles propertyfile="${developmentProps}" comment="My Data" decoration=true> 
-		  <entry key="config.db.driverClassName" value = "${@driverClassName}"/>
-		  <entry key="config.db.url"             value = "${@url}"            />
-		  <entry key="config.db.username"        value = "${@username}"       />
-		  <entry key="config.db.password"        value = "${@password}"       defaultValue=""/>
+		  <entry key="DB.driverClassName" value = "${@driverClassName}"/>
+		  <entry key="DB.url"             value = "${@url}"            />
+		  <entry key="DB.username"        value = "${@username}"       />
+		  <entry key="DB.password"        value = "${@password}"       defaultValue=""/>
 		</propertyfiles>
 	</target>
 	 */

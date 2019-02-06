@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 
 
 /**
@@ -34,29 +33,32 @@ public class DBOperations extends DBCP2_ConnectionPool {
 	 * jdbc:mysql://host:3306/db?useServerPrepStmts=false&rewriteBatchedStatements=true
 	 * 
 	 */
-	public static void driverManagerConnection() {
+	static boolean MySQL_ConnectorType4_Ver5 = true;
+	public void driverManagerConnection() {
 		try {
-			DB_URL = "jdbc:mysql://preproddb.clictest.com:3306/clictest";
-					/*+ "?"
-					+ "useServerPrepStmts=false&cachePrepStmts=true";*/
-			DB_User = "appsadmin";
-			DB_Password = "inf0tree#99";
-			System.out.println("DB_URL : "+ DB_URL);
 			// The newInstance() call is a work around for some broken Java implementations
-			Class.forName( DriverClass ).newInstance();
+			if( MySQL_ConnectorType4_Ver5 ) {
+				Class.forName( DriverClass ).newInstance(); // // MySQL Connector/J » 6.0.6
+			} else {
+				// Loading class `com.mysql.jdbc.Driver'. This is deprecated.
+				// The new driver class is `com.mysql.cj.jdbc.Driver'.
+				DB_URL += "?autoReconnect=true&useSSL=false";
+				Class.forName("com.mysql.cj.jdbc.Driver").newInstance(); // MySQL Connector/J » 6.0.6
+			}
+			System.out.println("DB_URL : "+ DB_URL);
+			
+			
 			Connection con = DriverManager.getConnection(DB_URL, DB_User, DB_Password);
 			System.out.println("Got Connection From DB.");
-			for (int i = 0; i < 10; i++) {
-				long startTime = System.currentTimeMillis();
-				
-				getStepsForTestDataFromDB(con, 479, "REC_02-02-2018_1517552917_46341_0"); // Pre
-				//getStepsForTestDataFromDB(con, 456, "REC_02-02-2018_1517550140_123883_0"); // Tata
-				
-				long endTime = System.currentTimeMillis();
-				long duration = (endTime - startTime);  
-				System.out.format("Milli = %s, ( S_Start : %s, S_End : %s ) \n", duration, startTime, endTime );
 			
-			}
+			long startTime = System.currentTimeMillis();
+			
+			String verifyEmail = verifyEmail("yashwanth.merugu@gmail.com");
+			System.out.println("Email : "+verifyEmail);
+			
+			long endTime = System.currentTimeMillis();
+			long duration = (endTime - startTime);  
+			System.out.format("Milli = %s, ( S_Start : %s, S_End : %s ) \n", duration, startTime, endTime );
 			con.close();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
@@ -68,35 +70,15 @@ public class DBOperations extends DBCP2_ConnectionPool {
 			e.printStackTrace();
 		}
 	}
-	public static void getStepsForTestDataFromDB(Connection conn, int testcaseid_tdc, String recordnameid) {
-		try {
-			
-			PreparedStatement pstmt = conn.prepareStatement(GET_TESTDATA);
-			pstmt.setInt(1, testcaseid_tdc);
-			pstmt.setString(2, recordnameid);
-			ResultSet rs = pstmt.executeQuery();
-			
-			System.out.println(" Got data success fully Successfully.");
-			pstmt.close();
-		} catch (Exception e) {
-		}
-	}
-	static String GET_TESTDATA = "SELECT ob.objectname_objrep,ob.type_objrep,ob.id_objrep,ob.locator_objrep,testcasedata.waittime,ts.inputdata,ts.id_tdr,ts.action_type "
-			+ "FROM  testdataresults ts "
-			+ "JOIN objectrepository ob ON objname = object_id "
-			+ "left join ("
-			+ "select tc.objectid,tc.waittime from testcasesteps as tc "
-			+ "join  testdatatestcases as tdt on tc.testcase_id=tdt.testcase_id "
-			+ "where tdt.incrementid_tdtc = ? ) As testcasedata on ob.object_id= testcasedata.objectid "
-			+ "WHERE recordid_trd = ? "
-			+ "AND ob.status =0  ORDER BY  ts.id_tdr ASC";
 	
 	public static void main(String[] args) {
-		/*DBOperations dao = new DBOperations();
+		DBOperations dao = new DBOperations();
+		/*
 		String verifyEmail = dao.verifyEmail("yashwanth.merugu@gmail.com");
 		System.out.println("Email : "+verifyEmail);*/
 		
-		driverManagerConnection();
+		dao.driverManagerConnection();
+		
 	}
 	
 	private static final String VERIFY_EMAIL = "SELECT * FROM `gmailusers` WHERE `email` = ?";

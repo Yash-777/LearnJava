@@ -80,12 +80,13 @@ public class MongoDBFiles {
 	}
 	public static void main(String[] args) {
 		String fileName = "777";
-		//upload( "D:\\IMediaWriterVedio7.mp4", "First");
+		String objectID = upload( "E:\\Nexus.mp4", "First");
 		//upload("E:\\IMediaWriterVedio7.mp4", "First", "");
-		download( "D:\\IMediaWriterVedio"+fileName+".mp4", fileName);
+		download( "D:\\IMediaWriterVedio"+fileName+".mp4", objectID);
 	}
 
-	public static void upload(String uploadFileLocation, String fileName) {
+	public static String upload(String uploadFileLocation, String fileName) {
+		String objectID = "";
 		try {
 			// http://mongodb.github.io/mongo-java-driver/3.0/driver/reference/connecting/authenticating/#ldap-plain
 			getConnection();
@@ -104,7 +105,7 @@ public class MongoDBFiles {
 				
 				gridFsInputFile.save(); //Save the file to MongoDB
 				Object id = gridFsInputFile.getId();
-				String objectID = id.toString();
+				objectID = id.toString();
 				System.out.println("Uploaded Successfully. - "+ objectID);
 			}
 			//download( "E:\\IMediaWriterVedio"+fileName+".mp4", fileName);
@@ -113,6 +114,7 @@ public class MongoDBFiles {
 		} finally {
 			closeConnection();
 		}
+		return objectID;
 	}
 	
 	public static void download(String downloadFileLocation, String fileID) {

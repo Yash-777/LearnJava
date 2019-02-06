@@ -63,7 +63,7 @@ public class ThreadsFlow {
 		System.out.println("Main Thread End. - remove from STACK");
 	}
 	
-	static void sleepThread(int sec) {
+	public static void sleepThread(int sec) {
 		try {
 			Thread.sleep( 1000 * sec );
 		} catch (InterruptedException e) {

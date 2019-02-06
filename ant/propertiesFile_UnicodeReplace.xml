@@ -57,5 +57,5 @@ config.db.password        :
 @driverClassName =com.mysql.jdbc.Driver
 @url             =jdbc:mysql://172.16.21.109:3306/automationlab
 @username        =appsadmin
-@password        =inf0tree#99
+@password        =Yash@777
 -->

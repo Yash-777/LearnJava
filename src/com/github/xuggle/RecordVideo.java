@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import com.github.os.threads.ThreadsUtil;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.xuggler.ICodec;
@@ -62,13 +63,7 @@ public class RecordVideo extends Audio_Video_Record implements Runnable {
 		
 		obj.sleepThread( 2 );
 		
-		System.out.println("Enter something to stop recording.");
-		try {
-			System.in.read();
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		ThreadsUtil.getUserAcceptence("Stop Recording...");
 		
 		recordVideo = false;
 		System.out.println("record : "+recordVideo);

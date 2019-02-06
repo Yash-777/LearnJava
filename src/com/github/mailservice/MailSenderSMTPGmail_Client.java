@@ -1,19 +1,15 @@
 package com.github.mailservice;
 
-import java.security.Security;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
-import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -21,22 +17,23 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 /**
- * MailService class is to send mail using JavaMail API.
+ * MailService class is to send mail using <a href=
+ * "https://cloud.google.com/appengine/docs/standard/java/mail/sending-mail-with-mail-api">JavaMail API</a>.
+ * <br />
+ * Exception: javax.mail.AuthenticationFailedException: <a href= 
+ * "https://accounts.google.com/signin/continue?sarp=1&scc=1&plt=AKgnsbui">534-5.7.14</a><br />
+ * <p>Solution: GMail <a href="https://myaccount.google.com/lesssecureapps">Less secure apps</a> access.
+ * <br />
+ * Sending Mail with the<a href="https://cloud.google.com/appengine/docs/standard/java/mail/sending-mail-with-mail-api">
+ *  Mail API</a>
+ * </p>
  * 
- * Exception:
- * javax.mail.AuthenticationFailedException: 534-5.7.14 
- * <https://accounts.google.com/signin/continue?sarp=1&scc=1&plt=AKgnsbui
- * 
- * https://support.google.com/mail/answer/78754%20b68sm1935299pfa.127
- * 
- * Solution:
- * GMail « https://myaccount.google.com/lesssecureapps
  * @author yashwanth.m
  *
  */
 public class MailSenderSMTPGmail_Client {
 	
-	private static String TO_ADDRESS = "XXXXXXXXXX@gmail.com";
+	static String TO_ADDRESS = "yashwanth2357@gmail.com";
 	
 	public static void main(String[] args) {
 		
@@ -44,24 +41,45 @@ public class MailSenderSMTPGmail_Client {
 		String electronic_Message = "MIME message Body - Test Mail using JavaMailAPI";
 		String contentType = "HTML"; // plain | HTML | Attached File | Inline File
 		
-		if( sendMail(subject, contentType, electronic_Message, TO_ADDRESS) ) {
+		//String toAddressList = MailDomain.USER_NAME.getValue();
+		String[] toAddressList = { MailDomain.USER_NAME.getValue() };
+		
+		if( sendMail(subject, contentType, electronic_Message, toAddressList) ) {
 			System.out.println("Sent message successfully.");
 		} else {
 			System.out.println("message failed.");
 		}
 	}
 	
-	public static boolean sendMail(String subject, String contentType, String body, String recipients) {
+	public static void sendMail( String subject, String msg, Object recipients ) {
+		try {
+			Properties props = MailUtils.getMailProperties( false );
+			Session mailSession = Session.getDefaultInstance(props, null);
+			Message message = new MimeMessage( mailSession );
+			message.setFrom( new InternetAddress( MailDomain.USER_NAME.getValue() ) );
+			
+			MailUtils.setRecipients(message, recipients);
+			
+			message.setSubject( subject );
+			
+			//String htmlData = "<h1>This is actual message embedded in HTML tags</h1>";
+			
+			message.setContent( msg, "text/html");
+			MailUtils.getTransportSendMessage(mailSession, message);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static boolean sendMail(String subject, String contentType, String msg, Object recipients) {
 		
-		String mailhost = "smtp.gmail.com", mailport = "587"; // 587 | 465
-		// mail.domain.com [587]
-		Session mailSession = getSessionObject(mailhost, mailport, true);
+		Session mailSession = MailUtils.getSessionObject(true);
 		try {
 			// Create a default MimeMessage object.
 			Message message = new MimeMessage( mailSession );
 			message.setFrom( new InternetAddress( MailDomain.USER_NAME.getValue() ) );
 			
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(TO_ADDRESS));
+			MailUtils.setRecipients(message, recipients);
 			
 			message.setSubject( subject );
 			
@@ -71,10 +89,10 @@ public class MailSenderSMTPGmail_Client {
 				
 				// Create a mime body and Set Text
 				BodyPart messageBodyPart = new MimeBodyPart();
-				messageBodyPart.setText( body );
+				messageBodyPart.setText( msg );
 				multipart.addBodyPart( messageBodyPart );
 
-				String filename = "D:\\Test.js";
+				String filename = "./books.xml";
 				// Part two is attachment
 				BodyPart  fileBodyPart = new MimeBodyPart();
 				DataSource source = new javax.activation.FileDataSource( filename );
@@ -94,7 +112,7 @@ public class MailSenderSMTPGmail_Client {
 				messageBodyPart.setContent(htmlText, "text/html");
 				multipart.addBodyPart( messageBodyPart );
 
-				String filename = "H:\\MailMesageBody.png";
+				String filename = "./Wiki_Images/MailMesageBody.png";
 				// Part two is attachment
 				BodyPart  fileBodyPart = new MimeBodyPart();
 				DataSource source = new javax.activation.FileDataSource( filename );
@@ -111,19 +129,11 @@ public class MailSenderSMTPGmail_Client {
 			} else { //Simple Message - [Plain Text | HTML Content]
 				String header_name = "Content-ID", header_value = "<b>";
 				message.addHeader( header_name, header_value );
-				message.setContent( body, "text/plain" ); 
+				message.setContent( msg, "text/plain" ); 
 				//(OR) message.setText( body );
 			}
 			
-			// Send message
-			Transport transport = mailSession.getTransport("smtps");
-			transport.connect(mailhost, MailDomain.USER_NAME.getValue(), MailDomain.PASSWORD.getValue());
-			message.saveChanges();
-			//transport.send(message);
-			transport.sendMessage(message, message.getAllRecipients());
-			transport.close();
-			System.out.println("Sent message successfully.");
-			return true;
+			return MailUtils.getTransportSendMessage(mailSession, message);
 		} catch (AddressException ex) {
 			System.out.println(ex);
 		} catch (MessagingException ex) {
@@ -134,48 +144,4 @@ public class MailSenderSMTPGmail_Client {
 		return false;
 	}
 	
-	public static Session getSessionObject(String mailhost, String mailport, boolean authProps) {
-		System.out.println("==- Outgoing Mail (SMTP) Server details like SMTP properties and Authenticate -==");
-		Properties props = new Properties();
-		props.put("mail.transport.protocol", "smtp");
-		props.put("mail.smtp.host", mailhost);
-		props.put("mail.smtp.port", mailport);
-		
-		props.put("mail.smtp.auth", "true");
-		if( mailport.equals("587") ) {
-			props.put("mail.smtp.starttls.enable", "true");
-		} else {
-			props.put("mail.smtps.ssl.enable", "true");
-		}
-		props.put("mail.smtp.socketFactory", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.socketFactory.port", "465");
-		props.put("mail.smtp.socketFactory.fallback", "false");
-		props.put("mail.smtp.debug", "true");
-		props.put("mail.smtp.quitwait", "false");
-		
-		
-		//create Authenticator object to pass in Session.getInstance argument
-		Authenticator authenticator = new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-			PasswordAuthentication passwordAuthentication = new PasswordAuthentication(
-					MailDomain.USER_NAME.getValue(), MailDomain.USER_NAME.getValue());
-			return passwordAuthentication;
-			}
-		};
-		
-		// com.sun.mail.smtp.SMTPSendFailedException: 530-5.5.1 Authentication Required.
-		Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-		
-		// Get the Session object by Authenticating Password.
-		if ( authProps ){
-			props.put("mail.smtp.user", MailDomain.USER_NAME.getValue());
-			props.put("mail.smtp.password", MailDomain.PASSWORD.getValue());
-			System.out.println("Session DefaultInstance");
-			return Session.getDefaultInstance(props);
-			//return Session.getInstance(props);
-		}
-		System.out.println("Session Instance with Authentication");
-		//return Session.getDefaultInstance(props, authenticator);
-		return Session.getInstance(props, authenticator);
-	}
 }
