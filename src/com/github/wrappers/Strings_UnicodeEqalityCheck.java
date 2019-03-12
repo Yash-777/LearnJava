@@ -22,6 +22,15 @@ import me.xuender.unidecode.Unidecode;
 public class Strings_UnicodeEqalityCheck {
 	static String strUni = "Tĥïŝ ĩš â fůňķŷ Šťŕĭńġ Æ,Ø,Ð,ß";
 	public static void main(String[] args) {
+		String o = new String("hi");
+		String o2 = new String("hi");
+		String l = "hi";
+		String l2 ="hi";
+		StringHelper.objectInfo(o);
+		StringHelper.objectInfo(o2);
+		StringHelper.objectInfo(l);
+		StringHelper.objectInfo(l2);
+		
 		String s1 = "My Sample Space Data", s2 = "My Sample Space Data";
 		System.out.format("S1 Bytes: %s\n", Arrays.toString(s1.getBytes()));
 		System.out.format("S2 Bytes: %s\n", Arrays.toString(s2.getBytes()));

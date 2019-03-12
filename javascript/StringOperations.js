@@ -43,18 +43,47 @@ if( str === reverseStr ) console.log('Array.from « Palindrome String');
  * https://stackoverflow.com/a/16577007/5081877
  * https://www.w3schools.com/jsref/jsref_regexp_g.asp
  *  ===== */
-String.prototype.allReplace = function(obj) {
+// To replace all matches, use a regular expression with a `/g` flag (global match):
+// Note that regular expressions are written without quotes.
+String.prototype.replaceAllMatches = function(obj) { // Obj format: { 'matchkey' : 'replaceStr' }
 	var retStr = this;
 	for (var x in obj) {
-		// http://wiki.tcl.tk/989
-		retStr = retStr.replace(new RegExp(x, 'g'), obj[x]);
+		var matchArray = retStr.match(new RegExp(x, 'ig'));
+		for (var i = 0; i < matchArray.length; i++) {
+			retStr = retStr.replaceMatch(x, obj[x], 0);
+		}
+	}
+	return retStr;
+};
+String.prototype.replaceMatch = function(matchkey, replaceStr, matchIndex) {
+	var retStr = this, repeatedIndex = 0;
+	var matchArray = retStr.match(new RegExp(matchkey, 'ig'));
+	for (var x = 0; x < matchArray.length; x++) {
+		if (repeatedIndex == 0) {
+			repeatedIndex = retStr.indexOf(matchkey);
+		} else {
+			repeatedIndex = retStr.indexOf(matchkey, repeatedIndex + 1);
+		}
+		if (x == matchIndex) {
+			retStr = retStr.substring(0, repeatedIndex) + replaceStr + retStr.substring(repeatedIndex + (matchkey.length));
+		}
 	}
 	return retStr;
 };
 
-var strReplace = '#this #is__ __#a test###__';
-strReplace = strReplace.allReplace({'#': '', '_': ''});
-console.log( strReplace );
+String.prototype.replaceAllRegexMatches = function(obj) { // Obj format: { 'matchkey' : 'replaceStr' }
+	var retStr = this;
+	for (var x in obj) {
+		retStr = retStr.replace(new RegExp(x, 'ig'), obj[x]);
+	}
+	return retStr;
+};
+
+var str = "yash yas $dfdas.";
+console.log('String : ', str);
+// No need to escape any special Character
+console.log('All Matched replace : ', str.replaceAllMatches({'as' : '**', 'y':'Y', '$':'-'}));
+console.log('Index Matched replace : ', str.replaceMatch('as', '*', 2) );
 
 var caseSensitiveSTR = "Is this all there is?";
 caseSensitiveSTR = caseSensitiveSTR.replace(/\?/g, 'II');

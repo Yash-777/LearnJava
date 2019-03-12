@@ -134,7 +134,11 @@ class Method_Signature {
  * Method signature: It consists of method name and
  * parameter list (number of parameters, type of the parameters and order of the parameters).
  * <br />
- * accessModifier « Cannot reduce the visibility of the inherited method from parent class
+ * accessModifier « Cannot reduce the visibility of the inherited method from parent class[Public, default, protected]
+ * <br />
+ * returnType « must be same as its parent
+ * <br />
+ * throwsExceptionsList « its up to the child class code. it may throw or not.
  * <pre>
  * {@code
  *   accessModifier returnType methodName(paramtersList ...) throwsExceptionsList {
@@ -144,6 +148,12 @@ class Method_Signature {
  *   public void m1(int a) throws Exception {
  *       ...
  *   }
+ *   
+ *   public void M1() throws Ex { } // superclass
+ *   public void M1() { } // Child Valid
+ * 
+ *   public void M2() { } // superclass
+ *   public void M2() { } // Child should not use throws exception
  * }
  * </pre>
  * NOTE: Parent_Class method throws
@@ -158,7 +168,7 @@ class Method_Declaration extends Method_Signature {
 		System.out.println("Static B - Over Hiding");
 	}
 	@Override
-	public void two(){
+	public void two() {
 		System.out.println("Instance B - Over Riding");
 	}
 	@Override

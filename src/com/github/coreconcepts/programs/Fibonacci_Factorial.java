@@ -10,19 +10,32 @@ package com.github.coreconcepts.programs;
  */
 public class Fibonacci_Factorial {
 	public static void main(String[] args) {
-		System.out.println("Fibonacii Series:");
-		sequence();
 		
-		int fact = factorial( 5 );
-		System.out.println("\nFactorial Number: "+fact);
+		// Integer can hold values of Minimum = -2,147,483,648 & Maximum = 2,147,483,647
+		// Integer [34=0], [32,33=-2147483648], [31=738197504].
+		// Long [34=4926277576697053184], [50=-3258495067890909184], [65=-9223372036854775808]
+		int num = 65;
+		factorial(num);
 		
+		long fact = factorialStack(num);
+		System.out.println("Factorial of a Number using Stack : "+fact);
+		
+		/*
 		System.out.println("WithOutLoops_Print_1_100 : ");
 		recurciveMethod(1, 10);
+		
+		System.out.println("Fibonacii Series:");
+		sequence();*/
 	}
-	private static int factorial(int n) {
-		if( n == 1 ) return 1;
-		return n * factorial( n-1 );
+	public static long factorial(int num) {
+		long fact = 1;
+		for (int i = 1; i <= num; i++) {
+			fact *= i;
+		}
+		System.out.println("Factorial of a Number using Loop  : "+ fact);
+		return fact;
 	}
+	
 	public static void sequence() {
 		int x = 0, y = 1, z = 1;
 		System.out.print( x + " : "+ y +" : "+ z);
@@ -33,6 +46,16 @@ public class Fibonacci_Factorial {
 			x = y;
 			y = z;
 		}
+	}
+	
+	/**
+	 * If the number is 10 Lacks then it leads to Stack Overflow Exception.
+	 * @param num
+	 * @return factorial of a number.(3! = 3 * 2 * 1)
+	 */
+	public static long factorialStack(int num) {
+		if( num == 1 ) return 1;
+		return num * factorialStack( num-1 );
 	}
 	public static void recurciveMethod(int min, int max) {
 		System.out.println( min );

@@ -15,12 +15,23 @@ public class Thread_vs_Runnable {
 		
 		Thread r1 = new Thread(a);
 		Thread r2 = new Thread(a);
+		
+		// For ever thread we create new object « Thread Class
+		Thread t1 = new ExtendsThread(10,20);
+		Thread t2 = new ExtendsThread(40,50);
+		
+		r2.run();
+		System.out.println("Polymorphism "
+				+ "« Calls Thread.run() method, which furthur calls Runnable object's run method."
+				+ "« Which is ImplementsRunnable.run().");
+		
+		t2.run();
+		System.out.println("Polymorphism « ExtendsThread.run() : Object.run() is Called.");
+		
+		// private native void start0(); - Separate thread.
 		r1.start();
 		r2.start();
 		
-		// For ever thread we create new object « Thread Class
-		ExtendsThread t1 = new ExtendsThread(10,20);
-		ExtendsThread t2 = new ExtendsThread(40,50);
 		t1.start();
 		t2.start();
 	}
@@ -44,6 +55,7 @@ class ExtendsThread extends Thread {
 	
 	@Override
 	public void run() {
+		System.out.print( Thread.currentThread().getName() + ": ");
 		System.out.println("Current thread values ["+field1+" : "+field2+"]");
 	}
 }

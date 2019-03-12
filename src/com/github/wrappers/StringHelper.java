@@ -56,4 +56,13 @@ public class StringHelper {
 		return  Objects.equals(str, anotherString);
 		//return (a == b) || (a != null && a.equals(b));
 	}
+	
+	public static void printHash(String str) {
+		System.out.format("String[%s], Hash[%d], SystemHash[%d]\n",
+				str, str.hashCode(), System.identityHashCode(str));
+	}
+	
+	public static void objectInfo(Object o) {
+		System.out.format("Address:[%d], Hash:[%d]\n",System.identityHashCode(o), o.hashCode());
+	}
 }
