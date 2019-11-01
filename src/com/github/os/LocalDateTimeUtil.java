@@ -18,7 +18,7 @@ public class LocalDateTimeUtil {
 	static DateTimeFormatter dateTimeFormatter = java.time.format.DateTimeFormatter.ofPattern( pattern );
 	
 	public static void main(String[] args) throws InterruptedException {
-		// Epoch time to Date « https://stackoverflow.com/a/34086460/5081877
+		// Epoch time to Date Â« https://stackoverflow.com/a/34086460/5081877
 		long startTime=System.currentTimeMillis();
 			
 		Thread.sleep( 1000 * 5 );
@@ -91,6 +91,66 @@ public class LocalDateTimeUtil {
 		
 		System.out.format("Epoch:[%d] Date:[%s]\n", epoch, date );
 		return date;
+	}
+	
+	public static void datesVariation() throws ParseException {
+		String timeStr = "15:50"; // HH:MM (OR) MM:SS
+		String timeStr2 = "16:50"; // HH:MM (OR) MM:SS
+		
+		boolean timeGreater = isTimeGreater(timeStr, timeStr2);
+		System.out.println("isTimeGreater: "+ timeGreater);
+		/*//testFormatDateDateStringCalendar
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("IST"));
+		Date date = DateHelper.parseDate("11/20/2008", "MM/dd/yyyy");
+		String s = DateHelper.formatDate(date, "dd.MM.yyyy", c); // "20.11.2008"
+
+		//String formatStr = "yyyy-MM-dd'T'HH:mmZ";
+		System.out.println("20.11.2008 : "+s);
+		
+		// reverse date
+		DateFormat reverseDateFormat = new SimpleDateFormat("yyyy/MM.dd");
+		reverseDateFormat.setLenient(false);
+		String format = reverseDateFormat.format(date);
+		System.out.println("Reverse Format : "+format);
+		
+		String startDateStr = "24/08/2019", endDateStr = "24/08/2019", formatStr = "dd/MM/yyyy";
+		Date startDate = DateHelper.parseDate(startDateStr, formatStr);
+		Date endDate = DateHelper.parseDate(endDateStr, formatStr);
+		
+		System.out.println("startDate : "+ startDate);
+		System.out.println("endDate : "+ endDate);*/
+	}
+	public static int getTimeinSeconds(String timeStr) { // HH:MM
+		String[] split = timeStr.split(":");
+		int min = Integer.valueOf( split[0] );
+		int sec = Integer.valueOf( split[1] );
+		
+		int total = ( (min * 60) + sec);
+		System.out.println("TIME: "+ total );
+		return total;
+	}
+	public static boolean isTimeGreater(String timeStr, String timeStr2) {
+		Integer timeinSeconds = getTimeinSeconds(timeStr);
+		Integer timeinSeconds2 = getTimeinSeconds(timeStr2);
+		
+		if (timeinSeconds > timeinSeconds2) {
+			System.out.println("T1 Greater than T2");
+			return true;
+		} else {
+			System.out.println("T1 Less than T2");
+			return false;
+		}
+	}
+	public static Date parseDate(String aSource, String formatStr) throws ParseException {
+		DateFormat dateFormat = new SimpleDateFormat(formatStr);
+		dateFormat.setLenient(false);
+		return dateFormat.parse(aSource);
+	}
+	public static String formatDate(Date aDate, String formatStr, Calendar calendar) {
+		DateFormat dateFormat = new SimpleDateFormat(formatStr);
+		dateFormat.setLenient(false);
+		dateFormat.setCalendar(calendar);
+		return dateFormat.format(aDate);
 	}
 }
 /*
