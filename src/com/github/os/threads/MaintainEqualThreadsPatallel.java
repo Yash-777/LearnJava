@@ -54,9 +54,34 @@ public class MaintainEqualThreadsPatallel {
 		System.out.println(threadName +":START");
 		for (int i = 1; i <= repeatCount; i++) {
 			System.out.println(threadName +":"+ i);
-			sleepThread(1000);
+			//sleepThread(1000);
+			// Either Static or Instance blocks, Threads will maintain separate copy to execute in Threads Stack
+			stackStactic();
+			stackInstance();
 		}
 		System.out.println(threadName +":END");
+	}
+	int ins = 0;
+	void stackInstance() {
+		String threadName = Thread.currentThread().getName();
+		System.out.println(threadName +":stackInstance():"+System.currentTimeMillis()+"-"+ ins++);
+		sleepThread(1000 * 3);
+		System.out.println(threadName +":stackInstance():"+System.currentTimeMillis());
+	}
+	static int stat = 0;
+	static void stackStactic() {
+		String threadName = Thread.currentThread().getName();
+		System.out.println(threadName +":stackStactic():"+System.currentTimeMillis()+"-"+ stat++);
+		sleepThreadStatic(1000 * 3);
+		System.out.println(threadName +":stackStactic():"+System.currentTimeMillis());
+	}
+	
+	public static void sleepThreadStatic(long mills) {
+		try {
+			Thread.sleep(mills);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
 class WorkerThread extends MaintainEqualThreadsPatallel implements Runnable {
