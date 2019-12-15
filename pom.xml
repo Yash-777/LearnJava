@@ -164,7 +164,7 @@ ${basedir} represents the directory containing pom.xml.
 	<dependency>
 		<groupId>org.apache.httpcomponents</groupId>
 		<artifactId>httpclient</artifactId>
-		<version>4.3</version>
+		<version>4.3.6</version>
 	</dependency>
 	<dependency>
 		<groupId>commons-codec</groupId>
