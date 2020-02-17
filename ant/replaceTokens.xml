@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+## env-dev.properties
+# For all DataSources
+db.jdbc.url=jdbc:oracle:thin:@
+db.jdbc.driver=oracle.jdbc.driver.OracleDriver
+
+##
+build.dir=build
+build.dir.classes=build/classes
+build.dir.lib=build/lib
+build.dir.etc=build/etc
+build.dir.tmp=build/tmp
+-->
+<project name="MyProject" default="createWar" basedir=".">
+	<!-- ${basedir} = https://ant.apache.org/manual/using.html -->
+	<!-- set global properties for this build -->
+	<property name="javac-version" value="1.8" />
+	<property name="clientName" value="Webservice" />
+	<property name="display.name" value="My App display name" />
+	<property name="src.dir" location="src/java/app"/> <!-- src/main/java -->
+	<property name="build.dir" location="build"/>
+	<property name="dist.dir" location="dist"/> <!-- maven target dir -->
+	<property name="dist.classes.dir" location="dist/WEB-INF/classes"/> <!-- maven target/classes dir -->
+	<property name="dist.webxml" location="dist/WEB-INF/web.xml"/>
+	<property name="dist.war" location="dist/MyProject-${target.profile.evn}.war"/>
+	<property name="dist.lib" location="dist/WEB-INF/lib"/>
+	<property name="libsRuntime" location="libs"/>
+	
+	<property name="targetWebContent" location="etc/WebContent"/>
+	
+	<property name="profilesProperties" value="${basedir}/build/datastorages/env-${target.profile.evn}.properties" />
+	<property name="buildProperties" value="${basedir}/build.properties" />
+	
+	<!-- File to Load/ Accessable -->
+	<property file="${profilesProperties}" /> <!-- MyProj/build/datastorages/build.properties -->
+	<property file="${buildProperties}" /> <!-- MyProj/build.properties -->
+
+	<target name="init" >
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build.dir}"/>
+	</target>
+	
+	<!-- ant createAndDeploy -Dtarget.profile.evn=dev -->
+	<target name="checkParams" depends="init">
+		<condition property="isReqParamsProvided">
+			<and>
+				<isset property="clientName" /> <!-- if provide read latest else read form property tag -->
+				<length string="${clientName}" when="greater" length="0" />
+				<isset property="target.profile.evn" /> <!-- mvn clean install -Pdev -->
+				<length string="${target.profile.evn}" when="greater" length="0" />
+			</and>
+		</condition>
+		<echo>Deploying Monitor with the following parameters:</echo>
+		<echo>client             = ${clientName}</echo>
+		<echo>display.name       = ${display.name}</echo>
+		<echo>target.profile.evn = ${target.profile.evn}</echo>
+		<echo>isReqParamsProvided = ${isReqParamsProvided}</echo>
+		<echo>Java/JVM version: ${ant.java.version}</echo> 
+		<echo>Java/JVM detail version: ${java.version}</echo> 
+	</target>
+
+	<target name="failOnInSufficentParams" depends="checkParams" unless="isReqParamsProvided">
+		<fail>Invalid params for neon deployment.</fail>
+	</target>
+
+	<target name="libraries" description="Libraries for runtime" depends="failOnInSufficentParams">
+		<mkdir dir="${libsRuntime}" />
+		<!--
+		get src="https://repository.apache.org/content/repositories/releases/../log4j.jar" 
+		dest="${libsRuntime}/log4j.jar" ignoreerrors="true" usetimestamp="true" />
+		-->
+	</target>
+
+	<target name="javaCompile" depends="libraries">
+		<delete dir="${dist.dir}" />
+		<mkdir dir="${dist.classes.dir}" />
+
+		<!-- compiling -->
+		<javac srcdir="${src.dir}" destdir="${dist.classes.dir}" debug="true" source="1.6" encoding="ISO-8859-1" target="${javac-version}">
+			<classpath>
+				<fileset dir="${runtimeLib}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="createWar" depends="javaCompile">
+		<delete file="${dist.dir}/*.war" />
+		
+		<echo>${basedir}/lib3rd/ant-contrib-1.0b3.jar</echo>
+		
+		<!-- ant-contrib:fileset https://ant.apache.org/manual/Types/filterset.html -->
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<pathelement location="${basedir}/ant-contrib-1.0b3.jar" />
+				<!--<pathelement location="${eclipse.home}/plugins/ant-contrib-1.0b3.jar" /> -->
+			</classpath>
+		</taskdef>
+		
+			<!-- 1) Read Keys from Properties and Replace the value in `filter filtersfile/*` files Bulk Changes -->
+			<filter filtersfile="${buildProperties}" />
+			<filter filtersfile="${profilesProperties}" />
+			<!-- Web content for WAR -->
+			<copy todir="${dist.dir}" filtering="true" overwrite="true">
+				<fileset dir="${targetWebContent}"> <!-- target/MyProject -->
+					<exclude name="CVS" />
+				</fileset>
+			</copy>
+			
+			<!-- 2) Enveronmet Specific Files if available the replace -->
+			<available file="${build.dir}/WebContent/${target.profile.evn}" property="envSpecificFiles" value="true" />
+			<if>
+				<equals arg1="envSpecificFiles" arg2="true" />
+				<then>
+					<copy todir="${dist.dir}" filtering="true" overwrite="true">
+						<fileset dir="${build.dir}/WebContent/${target.profile.evn}">
+							<exclude name="CVS" />
+						</fileset>
+					</copy>
+				</then>
+			</if>
+		<!-- ant-contrib:fileset -->
+		
+		<!-- ressource files -->
+		<copy todir="${dist.classes.dir}" overwrite="true">
+			<fileset dir="${src.dir}">
+				<include name="*" />
+			</fileset>
+		</copy>
+
+		<replace file="${dist.classes.dir}/log4j.properties" token="@keyName@" value="${keyValue}" />
+		
+		<!-- lib files -->
+		<copy todir="${dist.lib}" overwrite="true">
+			<fileset dir="${libsRuntime}" />
+		</copy>
+
+		<path id="warFileClassPath">
+			<fileset dir="${dist.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<manifestclasspath property="warClasspath" jarfile="${dist.war}">
+			<classpath refid="warFileClassPath" />
+		</manifestclasspath>
+		
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+		</tstamp>
+		
+		<!-- generate war file -->
+		<war destfile="${dist.war}" webxml="${dist.webxml}" basedir="${dist.dir}">
+			<!-- <fileset dir="${dist.dir}/WEB-INF/lib"> <include name="*.jar"/> </fileset>-->
+			<manifest>
+				<attribute name="Created-By" value="${user.name}" />
+				<attribute name="Java-Version" value="${java.version}" />
+				<attribute name="javac-Version" value="${javac-version}" />
+				<attribute name="Built-Date" value="On ${os.name}, at ${TODAY}"/>
+				<attribute name="Class-Path" value="${warClasspath}" />
+			</manifest>
+		</war>
+		
+		<echo>createWar successful</echo>
+	</target>
+
+</project>
