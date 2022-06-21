@@ -15,7 +15,7 @@
 	
 	<freemarker.version>2.3.28</freemarker.version>
 	
-	<mysql.connector.java>5.1.34</mysql.connector.java>
+	<mysql.connector.java>8.0.28</mysql.connector.java>
 </properties>
 
 <!-- https://maven.apache.org/pom.html -->
