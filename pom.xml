@@ -100,7 +100,7 @@ ${basedir} represents the directory containing pom.xml.
 	<dependency>
 		<groupId>org.apache.commons</groupId>
 		<artifactId>commons-email</artifactId>
-		<version>1.3.1</version>
+		<version>1.5</version>
 	</dependency>
 
 	<!-- Changed to « http://www.dcm4che.org/maven2/xuggle/xuggle-xuggler/5.4/ -->
