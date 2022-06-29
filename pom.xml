@@ -10,7 +10,7 @@
 	<aws.java>1.10.77</aws.java>
 	<fasterxml.jackson>2.10.1</fasterxml.jackson>
 	<seleniumVersion>3.5.1</seleniumVersion>
-	<poi.version>3.17</poi.version>
+	<poi.version>4.1.1</poi.version>
 	<opencsv.version>4.1</opencsv.version>
 	
 	<freemarker.version>2.3.28</freemarker.version>
