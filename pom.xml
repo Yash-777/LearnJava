@@ -7,7 +7,7 @@
   <description>Sample Examples related to CORE</description>
 	
 <properties>
-	<aws.java>1.10.77</aws.java>
+	<aws.java>1.12.261</aws.java>
 	<fasterxml.jackson>2.10.1</fasterxml.jackson>
 	<seleniumVersion>3.5.1</seleniumVersion>
 	<poi.version>3.17</poi.version>
